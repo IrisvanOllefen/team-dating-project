@@ -1,0 +1,34 @@
+{
+  "name": "team-dating-project",
+  "version": "1.0.0",
+  "description": "an application build for finding people who are interested in the same books as you",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IrisvanOllefen/team-dating-project.git"
+  },
+  "author": "Iris van Ollefen",
+  "contributors": [
+    "Iris van Ollefen",
+    "Nadine van den Bosch",
+    "Mynor Lobos",
+    "Nino Schelcher"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IrisvanOllefen/team-dating-project/issues"
+  },
+  "homepage": "https://github.com/IrisvanOllefen/team-dating-project#readme",
+  "devDependencies": {
+    "eslint": "^7.1.0",
+    "nodemon": "^2.0.4",
+    "prettier": "2.0.5"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
