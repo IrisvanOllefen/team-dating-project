@@ -1,3 +1,5 @@
+# Novel Love
+
 ## Concept
 It's sometimes difficult to start a conversation with people through a dating app. This can be because you don't know how to break the ice or if there are any common interests to talk about. This is why Novel Love can help. People fill in their top 3 favorite books and the book they are currently reading, then look for people with the same books on their lists, and start a conversation. They have the same interests, which makes it easy to break the ice and get in to a meaningful conversation in a couple of messages.
 
