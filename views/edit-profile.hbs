@@ -1,0 +1,55 @@
+{{#> layout }}
+<main class="editprofile">
+    <!-- This form has the action that sends you to the result page. It does this by using the post method. -->
+    <form action="/edit-profile" method="POST" enctype="multipart/form-data">
+        <h1>Welcome back to your profile, {{user.name}}!</h1>
+        <div class="personalinfo">
+            <label for="">
+                Profile Picture
+                <input type="file" name="profilepicture" accept="image/png, image/jpeg">
+                <img src="/uploads/{{user.profilepicture}}" alt="Profile Picture" width="200">
+            </label>
+            <label for="">
+                Name
+                <input type="text" name="name" value="{{user.name}}" />
+            </label>
+            <label for="">
+                Age
+                <input type="number" name="age" value="{{user.age}}" />
+            </label>
+        </div>
+        <h1>What are your 3 favorite books?</h1>
+        <div class="favoritebooks">
+            <label for="">
+                Number 1
+                <input type="text" name="books[]" value="{{user.favoriteBooks.[0]}}" />
+            </label>
+            <label for="">
+                Number 2
+                <input type=" text" name="books[]" value="{{user.favoriteBooks.[1]}}" />
+            </label>
+            <label for="">
+                Number 3
+                <input type="text" name="books[]" value="{{user.favoriteBooks.[2]}}" />
+            </label>
+        </div>
+        <h1>What book are you currently reading?</h1>
+        <div class="currentlyreading">
+            <label for="">
+                Currently:
+                <input type="text" name="currentBook" value="{{user.currentBook}}" />
+            </label>
+            <input class="goButton" type="submit" value="Save" />
+        </div>
+        <div>
+            <label for="" class="deleteAccount">
+                <input class="deleteCheckbox" type="checkbox" name="deleteAccount" />
+                Check this box if you are ready to delete your account.
+            </label>
+        </div>
+    </form>
+</main>
+{{/layout}}
+
+{{!-- LEARN MORE --}}
+{{!-- Expressions (like {{user.name}}: https://handlebarsjs.com/guide/#simple-expressions ) --}}

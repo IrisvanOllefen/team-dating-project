@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style/stylesheet2.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Rozha+One&display=swap"
+        rel="stylesheet" />
+    <title>{{title}}</title>
+</head>
+
+<body>
+    <!-- This is where the partial for my header is positioned. It is done with a template. -->
+    {{> header }}
+
+    {{> @partial-block }}
+
+    <!-- Here is my footer partial/template -->
+    {{> footer }}
+</body>
+
+</html>
+
+{{!-- LEARN MORE --}}
+{{!-- Adding partials: https://handlebarsjs.com/guide/partials.html --}}
+{{!-- Partial block: https://handlebarsjs.com/guide/partials.html#partial-blocks --}}
