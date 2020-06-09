@@ -1,0 +1,27 @@
+{{#> layout }}
+<main id="login">
+    <section>
+        <div>
+            <h1> Login</h1>
+            <p>Welcome! Thanks for signing up for MeetYou This is the application to find your match based on person and
+                the dogs you like.
+            </p>
+            <p>
+                To get to know you better we've prepared a few steps with questions you can answer so we can set up your
+                profile with your information!
+            </p>
+        </div>
+        <div>
+            <form method="POST" action="/loginform" id="login">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" autocomplete="off">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" autocomplete="off">
+                <button>Login</button>
+            </form>
+            <p>Haven't made an account yet?</p>
+            <p><a href="/register">Sign up now</a></p>
+        </div>
+    </section>
+</main>
+{{/layout}}

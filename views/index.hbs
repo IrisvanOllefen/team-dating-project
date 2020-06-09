@@ -1,13 +1,16 @@
 {{#> layout }}
 <main>
-    <h1> Matches</h1>
-    <div class="matches">
-        {{#each matches}}
-        <section class="match">
-            <img src="/uploads/{{this.profilepicture}}" alt="Profile Picture" width="200">
-            <p>{{this.name}}</p>
-        </section>
-        {{/each}}
-    </div>
+    <section>
+        <h1> Matches</h1>
+        <p>Hi {{user.firstname}}</p>
+        <div class="matches">
+            {{#each matches}}
+            <section class="match">
+                <img src="/uploads/{{this.profilepicture}}" alt="Profile Picture" width="200">
+                <p>{{this.name}}</p>
+            </section>
+            {{/each}}
+        </div>
+    </section>
 </main>
 {{/layout}}
