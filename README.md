@@ -30,3 +30,7 @@ It's sometimes difficult to start a conversation with people through a dating ap
 - **ESLint**: To have a continuous codings style throughout our project
 - **Nodemon**: To make running the code whilst working on it easier
 - **Prettier**: To help enforce our coding style better
+
+### Contributors
+
+- Nino Schelcher
