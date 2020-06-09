@@ -83,11 +83,15 @@ async function sessionFunction(req, res, next) {
 
 //Get the login page
 function getLoginPage(req, res) {
-  res.render("login");
+  res.render("login", {
+    title: "Novel Love — Login"
+  });
 }
 
 function getRegisterpage(req, res) {
-  res.render("register");
+  res.render("register", {
+    title: "Novel Love — Register"
+  });
 }
 
 // ROUTE TO THE HOMEPAGE
