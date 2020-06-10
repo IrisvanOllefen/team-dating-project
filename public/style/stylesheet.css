@@ -177,3 +177,29 @@ section {
     cursor: pointer;
     z-index: 90;
 }
+
+/* Media Queries */
+
+@media screen and (max-width:1200px) {
+    #login section, #register section {
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    #register section>div:last-of-type {
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width:992px) {
+    section {
+        max-width: 70%;
+    }
+}
+
+@media screen and (max-width:768px) {
+    #register section form {
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width:576px) {}

@@ -118,6 +118,15 @@ function registerFunction(req, res, next) {
   //   req.session.userId = user._id; // Using user._id because the user._id in the database is more reliable than the req.body.userId in the body itself because that one comes from the user.
   // }
 
+  // UserModel.findOne({ email: req.body.email }, function(res, err, user) {
+  //   if(user) {
+  //     console.log("somebody has already taken this email");
+  //     res.redirect("/register");
+  //   } else {
+  //     console.log("neem deze email maar");
+  //   }
+  // });
+
   UserModel.create({
     email: req.body.email,
     password: req.body.password,
@@ -141,13 +150,13 @@ function loginFunction(req, res, next) {
   if(req.body.email && req.body.password) {
     UserModel.findOne({
       email: req.body.email
-    }, (err, data) => {
+    }, (err, user) => {
       if(err) {
         next(err);
       }
-      if (data && data.password === req.body.password) {
+      if (user && user.password === req.body.password) {
         req.session.user = {
-          firstname: data.firstname
+          firstname: user.firstname
         };
         res.redirect("/");
       } else {
