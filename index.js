@@ -4,7 +4,7 @@ const hbs = require("hbs"); // The templating tool
 const mongoose = require("mongoose"); // The database (MongoDB)
 const bodyParser = require("body-parser"); // Form input encoder
 const session = require("express-session"); // Sessions
-const multer = require("multer"); // File uploads
+// const multer = require("multer"); // File uploads
 const UserModel = require("./models/user"); // Self-made user schema/model
 
 // CONFIGURATING ENV FILE TO BLOCK SENSITIVE INFORMATION
@@ -29,14 +29,19 @@ app
     })
   )
   .use(sessionFunction)
-  .get("/", homePageFunction)
-  .post("/login", logInFunction)
-  .get("/edit-profile", editProfilePageFunction)
+  .post("/registerform", registerFunction)
+  .post("/loginform", loginFunction)
   .post(
     "/edit-profile",
-    upload.single("profilepicture"),
+    // upload.single("profilepicture"),
     editProfileActionFunction
-  );
+  )
+  .get("/login", getLoginPage)
+  .get("/register", getRegisterpage)
+  .get("/", homePageFunction)
+
+  .get("/edit-profile", editProfilePageFunction);
+ 
 
 // CREATNG PARTIALS
 hbs.registerPartials(__dirname + "/views/partials", (error) => {
@@ -45,22 +50,22 @@ hbs.registerPartials(__dirname + "/views/partials", (error) => {
 });
 
 // USING MULTER TO UPLOADING IMAGES TO PROFILES
-const upload = multer({
-  dest: "public/uploads/", // The destination folder for uploaded images
-  limits: { fileSize: 5000000 }, // Put a limit on the file size
-  fileFilter: function fileFilter(req, file, cb) {
-    // Creating a functtion to filter out allowed files with a callback
-    if (file.mimetype === "image/png") {
-      // Mimetypehas to be image/png, image/jpeg (or image/jpg) for the callback to return true
-      cb(null, true);
-    } else if (file.mimetype === "image/jpeg") {
-      cb(null, true);
-    } else {
-      // If the mimetype is anything else, the callback will return false
-      cb(null, false);
-    }
-  },
-});
+// const upload = multer({
+//   dest: "public/uploads/", // The destination folder for uploaded images
+//   limits: { fileSize: 5000000 }, // Put a limit on the file size
+//   fileFilter: function fileFilter(req, file, cb) {
+//     // Creating a functtion to filter out allowed files with a callback
+//     if (file.mimetype === "image/png") {
+//       // Mimetypehas to be image/png, image/jpeg (or image/jpg) for the callback to return true
+//       cb(null, true);
+//     } else if (file.mimetype === "image/jpeg") {
+//       cb(null, true);
+//     } else {
+//       // If the mimetype is anything else, the callback will return false
+//       cb(null, false);
+//     }
+//   },
+// });
 
 // MIDDLEWARE FUNCTIONS
 // Applying session middleware in an async function
@@ -76,26 +81,92 @@ async function sessionFunction(req, res, next) {
   next(); // Using next() to pass to the next query
 }
 
-// ROUTE TO THE HOMEPAGE
-async function homePageFunction(req, res) {
-  const users = await UserModel.find({}).exec(); // Looking for all users in UserModel to make them available in a drop down in the header to switch users/accounts
-  res.render("index", {
-    // Rendering the index page
-    title: "Chat Overview Page", // Giving it a specific title for inside the head (used template for this in .hbs file)
-    users, // These are the users that are available in the drop down menu
-    matches: req.user ? req.user.matches : null, // Checking to see if a user is logged in to show its matches. If the user is not logged in, null will be returned which makes sure there are no matches visible.
+//Get the login page
+function getLoginPage(req, res) {
+  res.render("login", {
+    title: "Novel Love — Login"
   });
 }
 
-// LOGIN ROUTE
-async function logInFunction(req, res) {
-  const user = await UserModel.findById(req.body.userId).exec(); // Checking if the provided user exists in the database.
-  if (user) {
-    // If the user exits in the database, the userId will be set and the session variable will be returned to the user.
-    req.session.userId = user._id; // Using user._id because the user._id in the database is more reliable than the req.body.userId in the body itself because that one comes from the user.
-  }
-  res.redirect("/"); // After selecting a user, you get redirected to the homepage.
+function getRegisterpage(req, res) {
+  res.render("register", {
+    title: "Novel Love — Register"
+  });
 }
+
+// ROUTE TO THE HOMEPAGE
+async function homePageFunction(req, res) {
+  const users = await UserModel.find({}).exec(); // Looking for all users in UserModel to make them available in a drop down in the header to switch users/accounts
+  if(req.session.user) {
+    res.render("index", {
+    // Rendering the index page
+      title: "Chat Overview Page", // Giving it a specific title for inside the head (used template for this in .hbs file)
+      users, // These are the users that are available in the drop down menu
+      matches: req.user ? req.user.matches : null, // Checking to see if a user is logged in to show its matches. If the user is not logged in, null will be returned which makes sure there are no matches visible.
+      user: req.session.user
+    });
+  } else {
+    res.redirect("/login");
+  }
+}
+
+// Registration function //
+function registerFunction(req, res, next) {
+  // const user = await UserModel.findById(req.body.userId).exec(); // Checking if the provided user exists in the database.
+  // if (user) {
+  //   // If the user exits in the database, the userId will be set and the session variable will be returned to the user.
+  //   req.session.userId = user._id; // Using user._id because the user._id in the database is more reliable than the req.body.userId in the body itself because that one comes from the user.
+  // }
+
+  // UserModel.findOne({ email: req.body.email }, function(res, err, user) {
+  //   if(user) {
+  //     console.log("somebody has already taken this email");
+  //     res.redirect("/register");
+  //   } else {
+  //     console.log("neem deze email maar");
+  //   }
+  // });
+
+  UserModel.create({
+    email: req.body.email,
+    password: req.body.password,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    age: req.body.age,
+    gender: req.body.gender,
+    lookingfor: req.body.lookingfor,
+  }, (err) => {
+    if (err) {
+      next(err);
+    } else {
+      res.redirect("/");
+    }
+  });
+
+}
+
+// Login Function //
+function loginFunction(req, res, next) {
+  if(req.body.email && req.body.password) {
+    UserModel.findOne({
+      email: req.body.email
+    }, (err, user) => {
+      if(err) {
+        next(err);
+      }
+      if (user && user.password === req.body.password) {
+        req.session.user = {
+          firstname: user.firstname
+        };
+        res.redirect("/");
+      } else {
+        res.redirect("/register");
+      }
+    });
+  }
+}
+    
+
 
 // EDIT PROFILE ROUTE
 async function editProfilePageFunction(req, res) {
@@ -114,7 +185,6 @@ async function editProfilePageFunction(req, res) {
 
 // POST METHOD ROUTE ON EDIT-PROFILE
 async function editProfileActionFunction(req, res) {
-  console.log(req.body);
   // Used for multiple things, one of them is making uploading pictures possible
   if (!req.user) {
     // If the user is not logged in, the user will be redirected to the homepage.

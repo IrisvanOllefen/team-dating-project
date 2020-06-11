@@ -1,0 +1,60 @@
+{{#> layout }}
+<main id="register">
+    <section>
+        <div>
+            <h1> Register</h1>
+            <p>"Hier moet nog tekst komen"
+            </p>
+            <p>
+                Hier moet nog tekst komen"
+            </p>
+        </div>
+        <div>
+
+            <form method="POST" action="/registerform" id="register">
+                <label for="email">E-mail</label>
+                <input id="email" name="email" type="email" autocomplete="off">
+                <label for="email">Password</label>
+                <input id="password" name="password" type="password" autocomplete="off">
+                <label for="firstname">First Name</label>
+                <input id="firstname" name="firstname" type="text" autocomplete="off">
+                <label for="lastname">Last Name</label>
+                <input id="lastname" name="lastname" type="text" autocomplete="off">
+                <label for="age">Age</label>
+                <input id="age" min="18" name="age" type="number" autocomplete="off">
+                <div class="radios">
+                    <label for="gender">Gender</label>
+                    <ul>
+                        <li>
+                            <input id="gender1" name="gender" type="radio" value="male">
+                            <label for="gender1">Male</label>
+                        </li>
+                        <li>
+                            <input id="gender2" name="gender" type="radio" value="female">
+                            <label for="gender2">Female</label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="radios">
+                    <label for="lookingfor">Looking for</label>
+                    <ul>
+                        <li>
+                            <input id="pref1" name="lookingfor" type="radio" value="male">
+                            <label for="pref1">Male</label>
+                        </li>
+                        <li>
+                            <input id="pref2" name="lookingfor" type="radio" value="female">
+                            <label for="pref2">Female</label>
+                        </li>
+                        <li>
+                            <input id="pref3" name="lookingfor" type="radio" value="both">
+                            <label for="pref3">Both</label>
+                        </li>
+                    </ul>
+                </div>
+                <button> Register </button>
+            </form>
+        </div>
+    </section>
+</main>
+{{/layout}}

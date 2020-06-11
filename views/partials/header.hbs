@@ -1,23 +1,7 @@
 <header class="header">
-    {{#if users}}
-    <form action="/login" method="POST" class="selectButton">
-        <select name="userId">
-            <option value="">Select User</option>
-            {{#each users}}
-            <option value="{{this._id}}">
-                {{this.name}}
-            </option>
-            {{/each}}
-        </select>
-        <input type="submit" value="Go" />
-    </form>
-    {{/if}}
     <a href="/" class="headerlink">
         <h1>Novel Love</h1>
     </a>
-    <form action="/edit-profile" method="GET">
-        <input type="submit" value="Edit profile">
-    </form>
 </header>
 
 {{!-- LEARN MORE --}}

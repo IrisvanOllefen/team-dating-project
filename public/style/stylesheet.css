@@ -1,1 +1,205 @@
 /* Add styles here! */
+
+@import url('https://fonts.googleapis.com/css?family=Red+Hat+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,700;1,500&display=swap');
+/* Global Styling */
+
+*, ::before, ::after {
+    box-sizing: border-box;
+    font-family: var(--main);
+}
+
+:root {
+    --orange: #F79D65;
+    --light-orange: #F7B267;
+    --dark-orange: #F4845F;
+    --light-red: #F27058;
+    --dark-red: #F25C54;
+    --steel-blue: #5B85AA;
+    --purple-navy: #414770;
+    --black: #000000;
+    --white: #FFFFFF;
+    --main: "Red Hat Display", sans-serif;
+    --secondary: "Zilla Slab", sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+a {
+    font-family: var(--main);
+    color: #fff;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    background-color: var(--orange);
+    margin-top: 2em;
+}
+
+ul {
+    list-style: none;
+    padding-inline-start: 0;
+    margin-block-start: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1 {
+    margin: 0;
+    font-family: var(--main);
+}
+
+section {
+    background-color: var(--white);
+    margin: 2em auto;
+    padding: 3em 2em;
+    border-radius: 2em;
+    max-width: 50%;
+}
+
+/* Login Page */
+
+#login section, #register section {
+    display: flex;
+    justify-content: space-between;
+}
+
+#login section>div, #register section>div {
+    flex: 0 50%;
+}
+
+#login section form {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid var(--orange);
+    padding-bottom: 1em;
+    max-width: 50%;
+    margin: 0 auto;
+}
+
+#login section form label, #register section form label {
+    font-family: var(--secondary);
+    margin-bottom: .5em;
+}
+
+#login section form input, #register section form input {
+    margin-bottom: 1.2em;
+    height: 35px;
+    border: 1px solid #b8b8b8;
+    border-radius: .2em;
+    padding-left: .5em;
+}
+
+#login section form button {
+    text-decoration: none;
+    border: none;
+    font-size: 1em;
+    outline: none;
+    background-color: white;
+    cursor: pointer;
+    border: 1px solid var(--orange);
+    padding: .6em;
+}
+
+#login section div:last-of-type>p {
+    text-align: center;
+}
+
+#login section div:last-of-type p:last-of-type {
+    margin-top: 2em;
+}
+
+#login section div:last-of-type a, #register section form button {
+    text-decoration: none;
+    color: var(--white);
+    background-color: var(--orange);
+    border: 1px solid var(--orange);
+    padding: .7em 2em;
+}
+
+/* Register Page */
+
+#register section>div:last-of-type {
+    margin-left: 6em;
+}
+
+#register section form {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1em;
+    max-width: 70%;
+}
+
+#register form ul {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#register form li {
+    margin: .6em .7em .3em 0;
+    width: 80px;
+    height: 50px;
+    position: relative;
+    text-align: center;
+}
+
+#register form ul li label, #register form ul li input {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#register form input[type="radio"] {
+    opacity: 0.01;
+    z-index: 100;
+}
+
+#register input[type="radio"]:checked+label, .checked+label {
+    background-color: var(--orange);
+    color: var(--white);
+    transition: .3s;
+}
+
+#register form .radios label:not(:first-child) {
+    padding: 13px 5px 5px 5px;
+    border: 1px solid var(--orange);
+    cursor: pointer;
+    z-index: 90;
+}
+
+/* Media Queries */
+
+@media screen and (max-width:1200px) {
+    #login section, #register section {
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    #register section>div:last-of-type {
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width:992px) {
+    section {
+        max-width: 70%;
+    }
+}
+
+@media screen and (max-width:768px) {
+    #register section form {
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width:576px) {}

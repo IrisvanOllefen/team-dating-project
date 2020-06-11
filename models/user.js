@@ -5,6 +5,12 @@ const Schema = mongoose.Schema;
 
 // creates new schema for user
 const UserSchema = new Schema({
+  email: String,
+  password: String,
+  firstname: String,
+  lastname: String,
+  gender: String,
+  lookingfor: String,
   profilepicture: String,
   name: String,
   age: Number,
