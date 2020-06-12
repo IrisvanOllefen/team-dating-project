@@ -1,0 +1,25 @@
+{{#> layout }}
+<main id="books">
+    <section>
+        <div>
+            <h1>Information about your books</h1>
+            <p>Hi, {{user.name}}We'd like to know more about what books and genres you like so we can match you to
+                people who have the
+                same book interests as you.</p>
+            <form method="POST" action="/booksform" id="books">
+                <h2>What are your 3 favourite genres?</h2>
+                <label for="genre1">Genre 1</label>
+                <input type="text" id="genre1" name="genre">
+                <label for="genre2">Genre 1</label>
+                <input type="text" id="genre2" name="genre">
+                <label for="genre3">Genre 1</label>
+                <input type="text" id="genre3" name="genre">
+                <h2>What book are you currently reading?</h2>
+                <label for="currentbook">Current book</label>
+                <input type="text" id="currentbook" name="currentBook">
+                <button> Register </button>
+            </form>
+        </div>
+    </section>
+</main>
+{{/layout}}
