@@ -6,6 +6,8 @@ const bodyParser = require("body-parser"); // Form input encoder
 const session = require("express-session"); // Sessions
 // const multer = require("multer"); // File uploads
 const UserModel = require("./models/user"); // Self-made user schema/model
+const bcrypt = require("bcrypt"); //Bcrypt hashing
+
 
 // CONFIGURATING ENV FILE TO BLOCK SENSITIVE INFORMATION
 require("dotenv").config();
@@ -31,17 +33,17 @@ app
   .use(sessionFunction)
   .post("/registerform", registerFunction)
   .post("/loginform", loginFunction)
+  .post("/booksform", registerBooksFunction)
   .post(
     "/edit-profile",
     // upload.single("profilepicture"),
     editProfileActionFunction
   )
   .get("/login", getLoginPage)
-  .get("/register", getRegisterpage)
+  .get("/register", getRegisterPage)
+  .get("/register/books", getRegisterBooksPage)
   .get("/", homePageFunction)
-
   .get("/edit-profile", editProfilePageFunction);
- 
 
 // CREATNG PARTIALS
 hbs.registerPartials(__dirname + "/views/partials", (error) => {
@@ -88,10 +90,21 @@ function getLoginPage(req, res) {
   });
 }
 
-function getRegisterpage(req, res) {
+function getRegisterPage(req, res) {
   res.render("register", {
     title: "Novel Love — Register"
   });
+}
+
+function getRegisterBooksPage(req, res) {
+  if(req.session.user) {
+    res.render("books", {
+      title: "Novel Love — Register, Books",
+      user: req.session.user
+    });
+  } else  {
+    res.redirect("/register");
+  }
 }
 
 // ROUTE TO THE HOMEPAGE
@@ -111,7 +124,7 @@ async function homePageFunction(req, res) {
 }
 
 // Registration function //
-function registerFunction(req, res, next) {
+function registerFunction(req, res) {
   // const user = await UserModel.findById(req.body.userId).exec(); // Checking if the provided user exists in the database.
   // if (user) {
   //   // If the user exits in the database, the userId will be set and the session variable will be returned to the user.
@@ -127,7 +140,7 @@ function registerFunction(req, res, next) {
   //   }
   // });
 
-  UserModel.create({
+  req.session.user = {
     email: req.body.email,
     password: req.body.password,
     firstname: req.body.firstname,
@@ -135,14 +148,30 @@ function registerFunction(req, res, next) {
     age: req.body.age,
     gender: req.body.gender,
     lookingfor: req.body.lookingfor,
-  }, (err) => {
-    if (err) {
-      next(err);
-    } else {
-      res.redirect("/");
-    }
-  });
+  };
 
+  res.redirect("register/books");
+}
+
+function registerBooksFunction(req,res,next) {
+  req.session.user.favoriteBooks = req.body.genre;
+  req.session.user.currentBook = req.body.currentBook;
+
+  bcrypt.hash(req.session.user.password, 10, (hash) => {
+    req.session.user.password = hash;
+    console.log(hash);
+    console.log(req.session.user);
+  });
+  UserModel.create(
+    req.session.user
+    ,(err) => {
+      if (err) {
+        next(err);
+      } else {
+        res.redirect("/");
+      }
+    });
+    
 }
 
 // Login Function //

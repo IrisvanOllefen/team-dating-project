@@ -85,12 +85,12 @@ section {
     margin: 0 auto;
 }
 
-#login section form label, #register section form label {
+#login section form label, #register section form label, #books section form label {
     font-family: var(--secondary);
     margin-bottom: .5em;
 }
 
-#login section form input, #register section form input {
+#login section form input, #register section form input, #books section form input {
     margin-bottom: 1.2em;
     height: 35px;
     border: 1px solid #b8b8b8;
@@ -117,7 +117,7 @@ section {
     margin-top: 2em;
 }
 
-#login section div:last-of-type a, #register section form button {
+#login section div:last-of-type a, #register section form button, #books section form button {
     text-decoration: none;
     color: var(--white);
     background-color: var(--orange);
@@ -131,7 +131,7 @@ section {
     margin-left: 6em;
 }
 
-#register section form {
+#register section form, #books section form, #books section div {
     display: flex;
     flex-direction: column;
     padding-bottom: 1em;
