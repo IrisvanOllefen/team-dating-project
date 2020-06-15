@@ -3,24 +3,26 @@
     <section>
         <div>
             <h1> Register</h1>
-            <p>"Hier moet nog tekst komen"
+            <p>Welcome to the Novel Love register page, on this page you can sign up and make an account for Novel Love.
+                During this process we want to know more about you and what book genres you like so we can match you
+                with relevant people
             </p>
             <p>
-                Hier moet nog tekst komen"
+                After you've made an account you can <a href="login">login</a> to your account to find new people.
             </p>
         </div>
         <div>
             <form method="POST" action="/registerform" id="register">
                 <label for="email">E-mail</label>
-                <input id="email" name="email" type="email" autocomplete="off">
+                <input required id="email" name="email" type="email" autocomplete="off">
                 <label for="email">Password</label>
-                <input id="password" name="password" type="password" autocomplete="off">
+                <input required id="password" name="password" type="password" autocomplete="off">
                 <label for="firstname">First Name</label>
-                <input id="firstname" name="firstname" type="text" autocomplete="off">
+                <input required id="firstname" name="firstname" type="text" autocomplete="off">
                 <label for="lastname">Last Name</label>
-                <input id="lastname" name="lastname" type="text" autocomplete="off">
+                <input required id="lastname" name="lastname" type="text" autocomplete="off">
                 <label for="age">Age</label>
-                <input id="age" min="18" name="age" type="number" autocomplete="off">
+                <input required id="age" min="18" name="age" type="number" autocomplete="off">
                 <div class="radios">
                     <label for="gender">Gender</label>
                     <ul>
