@@ -4,11 +4,11 @@
         <h1> Matches</h1>
         <p>Hi {{user.firstname}}</p>
         <div class="matches">
-            {{#each matches}}
-            <section class="match">
+            {{#each users}}
+            <article class="match">
                 <img src="/uploads/{{this.profilepicture}}" alt="Profile Picture" width="200">
-                <p>{{this.name}}</p>
-            </section>
+                <p>{{this.firstname}}{{this.lastname}}</p>
+            </article>
             {{/each}}
         </div>
     </section>

@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt"); 
 
 // declares schema
 const Schema = mongoose.Schema;
 
 // creates new schema for user
 const UserSchema = new Schema({
-  email: String,
+  email: {type: String, unique:true},
   password: String,
   firstname: String,
   lastname: String,
@@ -17,6 +18,19 @@ const UserSchema = new Schema({
   favoriteBooks: [String],
   currentBook: String,
   matches: [{ type: Schema.Types.ObjectId, ref: "User" }],
+});
+
+//Making sure the password gets hashed
+UserSchema.pre("save", function (next) {
+  let user = this;
+  bcrypt.hash(user.password, 10, function (err, hash) {
+    if (err) {
+      return next(err); 
+    } else {
+      user.password = hash;
+      next();
+    }
+  });
 });
 
 // registers UserSchema with mongoose

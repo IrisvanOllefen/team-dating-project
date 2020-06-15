@@ -131,15 +131,6 @@ function registerFunction(req, res) {
   //   req.session.userId = user._id; // Using user._id because the user._id in the database is more reliable than the req.body.userId in the body itself because that one comes from the user.
   // }
 
-  // UserModel.findOne({ email: req.body.email }, function(res, err, user) {
-  //   if(user) {
-  //     console.log("somebody has already taken this email");
-  //     res.redirect("/register");
-  //   } else {
-  //     console.log("neem deze email maar");
-  //   }
-  // });
-
   req.session.user = {
     email: req.body.email,
     password: req.body.password,
@@ -157,21 +148,15 @@ function registerBooksFunction(req,res,next) {
   req.session.user.favoriteBooks = req.body.genre;
   req.session.user.currentBook = req.body.currentBook;
 
-  bcrypt.hash(req.session.user.password, 10, (hash) => {
-    req.session.user.password = hash;
-    console.log(hash);
-    console.log(req.session.user);
-  });
-  UserModel.create(
-    req.session.user
-    ,(err) => {
-      if (err) {
-        next(err);
-      } else {
-        res.redirect("/");
-      }
-    });
-    
+  const newUser = new UserModel(req.session.user);
+
+  newUser.save((err) => {
+    if (err) {
+      next(err);
+    } else {
+      res.redirect("/");
+    }
+  }); 
 }
 
 // Login Function //
@@ -182,20 +167,23 @@ function loginFunction(req, res, next) {
     }, (err, user) => {
       if(err) {
         next(err);
-      }
-      if (user && user.password === req.body.password) {
-        req.session.user = {
-          firstname: user.firstname
-        };
-        res.redirect("/");
       } else {
-        res.redirect("/register");
+        bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
+          if (err) {
+            throw err;
+          } else if (!isMatch) {
+            res.redirect("/login");
+          } else {
+            req.session.user = {
+              firstname: user.firstname
+            }; 
+            res.redirect("/");
+          }
+        });
       }
     });
   }
 }
-    
-
 
 // EDIT PROFILE ROUTE
 async function editProfilePageFunction(req, res) {

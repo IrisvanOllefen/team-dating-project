@@ -109,6 +109,10 @@ section {
     padding: .6em;
 }
 
+#login section div:first-of-type a, #register section div:first-of-type a {
+    color: var(--orange);
+}
+
 #login section div:last-of-type>p {
     text-align: center;
 }
@@ -176,6 +180,11 @@ section {
     border: 1px solid var(--orange);
     cursor: pointer;
     z-index: 90;
+}
+
+.matches {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 /* Media Queries */
