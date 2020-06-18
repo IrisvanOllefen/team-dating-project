@@ -244,6 +244,10 @@ function loginFunction(req, res, next) {
             }
           });
         }
+      });
+  }
+}
+
 
 // EDIT PROFILE ROUTE
 async function editProfilePageFunction(req, res) {
