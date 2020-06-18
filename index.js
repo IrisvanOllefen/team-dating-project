@@ -16,6 +16,43 @@ require("dotenv").config();
 // THE URL TO MY DATABASE
 const MONGO_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/test?retryWrites=true&w=majority`;
 
+passport.serializeUser(function (user, done) {
+  done(null, user._id);
+});
+
+passport.deserializeUser(function (id, done) {
+  UserModel.findById(id, function (err, user) {
+    done(err, user);
+  });
+});
+
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: `${process.env.FACEBOOK_APP_ID}`,
+      clientSecret: `${process.env.FACEBOOK_APP_SECRET}`,
+      callbackURL: "http://localhost:8000/auth/facebook/callback",
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      const userByFacebookId = await UserModel.findOne({
+        facebookId: profile.id,
+      }).exec();
+
+      if (userByFacebookId) {
+        done(null, userByFacebookId);
+        return;
+      }
+
+      const user = new UserModel();
+      user.facebookId = profile.id;
+
+      await user.save();
+
+      done(null, user);
+    }
+  )
+);
+
 const app = express();
 
 // CREATING SETUP ROUTES, POSTS AND GET REQUESTS
@@ -48,11 +85,7 @@ app
   .get("/register/books", getRegisterBooksPage)
   .get("/", homePageFunction)
   .post("/", passport.use)
-  .get(
-    "/edit-profile",
-    passport.authenticate("facebook"),
-    editProfilePageFunction
-  )
+  .get("/edit-profile", editProfilePageFunction)
   // Redirect the user to Facebook for authentication.  When complete,
   // Facebook will redirect the user back to the application at
   //     /auth/facebook/callback
@@ -65,7 +98,7 @@ app
   .get(
     "/auth/facebook/callback",
     passport.authenticate("facebook", {
-      successRedirect: "/edit-profile",
+      successRedirect: "/",
       failureRedirect: "/login",
     })
   );
@@ -137,7 +170,7 @@ function getRegisterBooksPage(req, res) {
 // ROUTE TO THE HOMEPAGE
 async function homePageFunction(req, res) {
   const users = await UserModel.find({}).exec(); // Looking for all users in UserModel to make them available in a drop down in the header to switch users/accounts
-  if (req.session.user) {
+  if (req.user) {
     res.render("index", {
       // Rendering the index page
       title: "Chat Overview Page", // Giving it a specific title for inside the head (used template for this in .hbs file)
@@ -264,60 +297,6 @@ async function editProfileActionFunction(req, res) {
     user: req.user,
   });
 }
-
-passport.serializeUser(function (user, done) {
-  done(null, user._id);
-});
-
-passport.deserializeUser(function (id, done) {
-  UserModel.findById(id, function (err, user) {
-    done(err, user);
-  });
-});
-
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: `${process.env.FACEBOOK_APP_ID}`,
-      clientSecret: `${process.env.FACEBOOK_APP_SECRET}`,
-      callbackURL: "http://localhost:8000/auth/facebook/callback",
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      const userByFacebookId = await UserModel.findOne({
-        facebookId: profile.id,
-      }).exec();
-
-      if (userByFacebookId) {
-        done(null, userByFacebookId);
-        return;
-      }
-
-      const user = new UserModel();
-      user.facebookId = profile.id;
-
-      await user.save();
-
-      done(null, user);
-    }
-  )
-);
-
-// // Redirect the user to Facebook for authentication.  When complete,
-// // Facebook will redirect the user back to the application at
-// //     /auth/facebook/callback
-// app.get("/auth/facebook", passport.authenticate("facebook"));
-
-// // Facebook will redirect the user to this URL after approval.  Finish the
-// // authentication process by attempting to obtain an access token.  If
-// // access was granted, the user will be logged in.  Otherwise,
-// // authentication has failed.
-// app.get(
-//   "/auth/facebook/callback",
-//   passport.authenticate("facebook", {
-//     successRedirect: "/",
-//     failureRedirect: "/login",
-//   })
-// );
 
 // RUNNING THE APPLICATION
 async function run() {
