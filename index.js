@@ -5,15 +5,53 @@ const mongoose = require("mongoose"); // The database (MongoDB)
 const bodyParser = require("body-parser"); // Form input encoder
 const session = require("express-session"); // Sessions
 // const multer = require("multer"); // File uploads
-const UserModel = require("./models/user"); // Self-made user schema/model
 const bcrypt = require("bcrypt"); //Bcrypt hashing
-
+const passport = require("passport"), // Passport
+  FacebookStrategy = require("passport-facebook").Strategy; // Passport facebook strategy
+const UserModel = require("./models/user"); // Self-made user schema/model
 
 // CONFIGURATING ENV FILE TO BLOCK SENSITIVE INFORMATION
 require("dotenv").config();
 
 // THE URL TO MY DATABASE
 const MONGO_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/test?retryWrites=true&w=majority`;
+
+passport.serializeUser(function (user, done) {
+  done(null, user._id);
+});
+
+passport.deserializeUser(function (id, done) {
+  UserModel.findById(id, function (err, user) {
+    done(err, user);
+  });
+});
+
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: `${process.env.FACEBOOK_APP_ID}`,
+      clientSecret: `${process.env.FACEBOOK_APP_SECRET}`,
+      callbackURL: "http://localhost:8000/auth/facebook/callback",
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      const userByFacebookId = await UserModel.findOne({
+        facebookId: profile.id,
+      }).exec();
+
+      if (userByFacebookId) {
+        done(null, userByFacebookId);
+        return;
+      }
+
+      const user = new UserModel();
+      user.facebookId = profile.id;
+
+      await user.save();
+
+      done(null, user);
+    }
+  )
+);
 
 const app = express();
 
@@ -30,7 +68,10 @@ app
       saveUninitialized: true,
     })
   )
-  .use(sessionFunction)
+  .use(passport.initialize())
+  .use(passport.session())
+  // TODO: Zie comment bij sessionFunction
+  // .use(sessionFunction)
   .post("/registerform", registerFunction)
   .post("/loginform", loginFunction)
   .post("/booksform", registerBooksFunction)
@@ -43,7 +84,24 @@ app
   .get("/register", getRegisterPage)
   .get("/register/books", getRegisterBooksPage)
   .get("/", homePageFunction)
-  .get("/edit-profile", editProfilePageFunction);
+  .post("/", passport.use)
+  .get("/edit-profile", editProfilePageFunction)
+  // Redirect the user to Facebook for authentication.  When complete,
+  // Facebook will redirect the user back to the application at
+  //     /auth/facebook/callback
+  .get("/auth/facebook", passport.authenticate("facebook"))
+
+  // Facebook will redirect the user to this URL after approval.  Finish the
+  // authentication process by attempting to obtain an access token.  If
+  // access was granted, the user will be logged in.  Otherwise,
+  // authentication has failed.
+  .get(
+    "/auth/facebook/callback",
+    passport.authenticate("facebook", {
+      successRedirect: "/",
+      failureRedirect: "/login",
+    })
+  );
 
 // CREATNG PARTIALS
 hbs.registerPartials(__dirname + "/views/partials", (error) => {
@@ -71,38 +129,40 @@ hbs.registerPartials(__dirname + "/views/partials", (error) => {
 
 // MIDDLEWARE FUNCTIONS
 // Applying session middleware in an async function
-async function sessionFunction(req, res, next) {
-  if (req.session.userId) {
-    const user = await UserModel.findById(req.session.userId) // All information about the logged in user will be available under req.user
-      .populate("matches") // Populate is Mongoose Syntax and queries all matches from the user collection
-      .exec(); // This is used to execute the query
-    if (user) {
-      req.user = user;
-    }
-  }
-  next(); // Using next() to pass to the next query
-}
+// TODO: Dit moet verwijderd worden om passport goed te kunnen gebruiken omdat passport req.user toevoegd
+// async function sessionFunction(req, res, next) {
+// if (req.session.userId) {
+//   const user = await UserModel.findById(req.session.userId) // All information about the logged in user will be available under req.user
+//     .populate("matches") // Populate is Mongoose Syntax and queries all matches from the user collection
+//     .exec(); // This is used to execute the query
+//   if (user) {
+//     req.user = user;
+//   }
+// }
+// next(); // Using next() to pass to the next query
+// }
 
 //Get the login page
 function getLoginPage(req, res) {
+  console.log(req.user);
   res.render("login", {
-    title: "Novel Love — Login"
+    title: "Novel Love — Login",
   });
 }
 
 function getRegisterPage(req, res) {
   res.render("register", {
-    title: "Novel Love — Register"
+    title: "Novel Love — Register",
   });
 }
 
 function getRegisterBooksPage(req, res) {
-  if(req.session.user) {
+  if (req.session.user) {
     res.render("books", {
       title: "Novel Love — Register, Books",
-      user: req.session.user
+      user: req.session.user,
     });
-  } else  {
+  } else {
     res.redirect("/register");
   }
 }
@@ -110,13 +170,13 @@ function getRegisterBooksPage(req, res) {
 // ROUTE TO THE HOMEPAGE
 async function homePageFunction(req, res) {
   const users = await UserModel.find({}).exec(); // Looking for all users in UserModel to make them available in a drop down in the header to switch users/accounts
-  if(req.session.user) {
+  if (req.user) {
     res.render("index", {
-    // Rendering the index page
+      // Rendering the index page
       title: "Chat Overview Page", // Giving it a specific title for inside the head (used template for this in .hbs file)
       users, // These are the users that are available in the drop down menu
       matches: req.user ? req.user.matches : null, // Checking to see if a user is logged in to show its matches. If the user is not logged in, null will be returned which makes sure there are no matches visible.
-      user: req.session.user
+      user: req.session.user,
     });
   } else {
     res.redirect("/login");
@@ -144,7 +204,7 @@ function registerFunction(req, res) {
   res.redirect("register/books");
 }
 
-function registerBooksFunction(req,res,next) {
+function registerBooksFunction(req, res, next) {
   req.session.user.favoriteBooks = req.body.genre;
   req.session.user.currentBook = req.body.currentBook;
 
@@ -156,37 +216,38 @@ function registerBooksFunction(req,res,next) {
     } else {
       res.redirect("/");
     }
-  }); 
+  });
 }
 
-// Login Function //
-function loginFunction (req, res, next) {
-  if(req.body.email && req.body.password) {
-    UserModel.findOne({
-      email: req.body.email
-    }, (err, user) => {
-      if(err) {
-        next(err);
-      } else {
-        bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
-          if (err) {
-            throw err;
-          } else if (!isMatch) {
-            res.redirect("/login");
-          } else {
-            req.session.user = {
-              firstname: user.firstname
-            }; 
-            res.redirect("/");
-          }
-        });
-      }
-    });
-  }
-}
+// Login Function
+// TODO: Dit vervangen door passport localstrategy http://www.passportjs.org/docs/username-password/
+function loginFunction(req, res, next) {
+  if (req.body.email && req.body.password) {
+    UserModel.findOne(
+      {
+        email: req.body.email,
+      },
+      (err, user) => {
+        if (err) {
+          next(err);
+        } else {
+          bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
+            if (err) {
+              throw err;
+            } else if (!isMatch) {
+              res.redirect("/login");
+            } else {
+              req.session.user = {
+                firstname: user.firstname,
+              };
+              res.redirect("/");
+            }
+          });
+        }
 
 // EDIT PROFILE ROUTE
 async function editProfilePageFunction(req, res) {
+  console.log(req.user);
   if (!req.user) {
     // If a user is not logged in, you will be redirected to the homepage
     res.redirect("/");
