@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt"); 
+const bcrypt = require("bcrypt");
 
 // declares schema
 const Schema = mongoose.Schema;
@@ -8,6 +8,7 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   email: String,
   password: String,
+  facebookId: String,
   firstname: String,
   lastname: String,
   gender: String,
@@ -22,15 +23,16 @@ const UserSchema = new Schema({
 
 //Making sure the password gets hashed
 UserSchema.pre("save", function (next) {
-  let user = this;
-  bcrypt.hash(user.password, 10, function (err, hash) {
-    if (err) {
-      return next(err); 
-    } else {
-      user.password = hash;
-      next();
-    }
-  });
+  next();
+  // let user = this;
+  // bcrypt.hash(user.password, 10, function (err, hash) {
+  //   if (err) {
+  //     return next(err);
+  //   } else {
+  //     user.password = hash;
+  //     next();
+  //   }
+  // });
 });
 
 // registers UserSchema with mongoose
