@@ -3,18 +3,44 @@
     <section>
         <div>
             <h1>Information about your books</h1>
-            <p>Hi, {{user.name}}We'd like to know more about what books and genres you like so we can match you to
+            <p>Hi, {{user.name}} We'd like to know more about what books and genres you like so we can match you to
                 people who have the
                 same book interests as you.</p>
             <form method="POST" action="/booksform" id="books">
-                <h2>What are your 3 favourite genres?</h2>
-                <label for="genre1">Genre 1</label>
-                <input type="text" id="genre1" name="genre">
-                <label for="genre2">Genre 1</label>
-                <input type="text" id="genre2" name="genre">
-                <label for="genre3">Genre 1</label>
-                <input type="text" id="genre3" name="genre">
-                <h2>What book are you currently reading?</h2>
+                <h2>What are your 3 favourite book genres?</h2>
+                <div>
+                    <label for="genre1">Genre 1</label>
+                    <select name="genre" id="genre1">
+                        <option value="1">Choose a genre</option>
+                        <option value="Self-help">Self-help</option>
+                        <option value="Classic Literature">Classic Literature</option>
+                        <option value="Thriller/Horror">Thriller/Horror</option>
+                        <option value="Romance Novels">Romance Novels</option>
+                        <option value="Non-fiction">Non-fiction</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="genre2">Genre 2</label>
+                    <select name="genre" id="genre2">
+                        <option value="0">Choose a genre</option>
+                        <option value="Self-help">Self-help</option>
+                        <option value="Classic Literature">Classic Literature</option>
+                        <option value="Thriller/Horror">Thriller/Horror</option>
+                        <option value="Romance Novels">Romance Novels</option>
+                        <option value="Non-fiction">Non-fiction</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="genre3">Genre 3</label>
+                    <select name="genre" id="genre3">
+                        <option value="0">Choose a genre</option>
+                        <option value="Self-help">Self-help</option>
+                        <option value="Classic Literature">Classic Literature</option>
+                        <option value="Thriller/Horror">Thriller/Horror</option>
+                        <option value="Romance Novels">Romance Novels</option>
+                        <option value="Non-fiction">Non-fiction</option>
+                    </select>
+                </div>
                 <label for="currentbook">Current book</label>
                 <input type="text" id="currentbook" name="currentBook">
                 <button> Register </button>

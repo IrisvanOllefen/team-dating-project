@@ -109,6 +109,10 @@ section {
     padding: .6em;
 }
 
+#login section div:first-of-type p, #register section div:first-of-type p, #books section div p {
+    font-family: var(--secondary);
+}
+
 #login section div:first-of-type a, #register section div:first-of-type a {
     color: var(--orange);
 }
@@ -180,6 +184,13 @@ section {
     border: 1px solid var(--orange);
     cursor: pointer;
     z-index: 90;
+}
+
+#books section form select {
+    padding: 0.5em 0.8em;
+    margin: .5em 0;
+    border: 1px solid #b8b8b8;
+    border-radius: .2em;
 }
 
 .matches {
