@@ -1,7 +1,27 @@
 <header class="header">
-    <a href="/" class="headerlink">
-        <h1>Novel Love</h1>
-    </a>
+    <nav>
+        <a href="/" class="headerlink">
+            <h1>Novel Love</h1>
+        </a>
+        {{#if user}}
+        <div>
+            <ul>
+                <a href="/discover/{{ user._id }}">
+                    <li><img src="../images/discover.png" alt="discover"></li>
+                </a>
+                <a href="/matches/{{user._id}}">
+                    <li><img src="../images/matches.png" alt="matches"></li>
+                </a>
+                <a href="/profile/{{user._id}}">
+                    <li><img src="../images/profile.png" alt="profile"></li>
+                </a>
+                <form action="/signout" method="POST">
+                    <button><img src="../images/logout.png" alt="logout"></button>
+                </form>
+            </ul>
+        </div>
+        {{/if}}
+    </nav>
 </header>
 
 {{!-- LEARN MORE --}}
