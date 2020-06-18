@@ -34,6 +34,7 @@ app
   .post("/registerform", registerFunction)
   .post("/loginform", loginFunction)
   .post("/booksform", registerBooksFunction)
+  .post("/signout", signOutUser)
   .post(
     "/edit-profile",
     // upload.single("profilepicture"),
@@ -99,7 +100,7 @@ function getRegisterPage(req, res) {
 function getRegisterBooksPage(req, res) {
   if(req.session.user) {
     res.render("books", {
-      title: "Novel Love — Register, Books",
+      title: "Novel Love — Register Books",
       user: req.session.user
     });
   } else  {
@@ -113,7 +114,7 @@ async function homePageFunction(req, res) {
   if(req.session.user) {
     res.render("index", {
     // Rendering the index page
-      title: "Chat Overview Page", // Giving it a specific title for inside the head (used template for this in .hbs file)
+      title: "Novel Love — Discover ", // Giving it a specific title for inside the head (used template for this in .hbs file)
       users, // These are the users that are available in the drop down menu
       matches: req.user ? req.user.matches : null, // Checking to see if a user is logged in to show its matches. If the user is not logged in, null will be returned which makes sure there are no matches visible.
       user: req.session.user
@@ -231,6 +232,11 @@ async function editProfileActionFunction(req, res) {
     title: "Edit Profile Page",
     user: req.user,
   });
+}
+
+async function signOutUser(req, res) {
+  req.session.destroy();
+  res.redirect("/login");
 }
 
 // RUNNING THE APPLICATION

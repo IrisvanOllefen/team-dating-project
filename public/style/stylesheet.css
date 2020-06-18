@@ -23,12 +23,6 @@
     --secondary: "Zilla Slab", sans-serif;
 }
 
-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 a {
     font-family: var(--main);
     color: #fff;
@@ -40,6 +34,10 @@ body {
     position: relative;
     background-color: var(--orange);
     margin-top: 2em;
+}
+
+button:focus {
+    outline: none;
 }
 
 ul {
@@ -63,6 +61,44 @@ section {
     padding: 3em 2em;
     border-radius: 2em;
     max-width: 50%;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+header h1 {
+    text-align: center;
+    font-size: 2.5em;
+}
+
+header nav>div {
+    margin-top: 1.5em;
+}
+
+header nav>div ul {
+    width: 275px;
+    justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+header nav>div ul li, header nav>div ul button {
+    background-color: #fff;
+    padding: 1em;
+    border-radius: 100%;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+}
+
+header nav div img {
+    width: 1.5em;
 }
 
 /* Login Page */
