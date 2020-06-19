@@ -176,21 +176,62 @@ function getRegisterBooksPage(req, res) {
 }
 
 // ROUTE TO THE HOMEPAGE
+// async function homePageFunction(req, res) {
+//   const users = await UserModel.find({}).exec(); // Looking for all users in UserModel to make them available in a drop down in the header to switch users/accounts
+  
+//   if (req.user) {
+//     res.render("index", {
+//     // Rendering the index page
+//       title: "Novel Love — Discover ", // Giving it a specific title for inside the head (used template for this in .hbs file)
+//       users, // These are the users that are available in the drop down menu
+//       matches: req.user ? req.user.matches : null, // Checking to see if a user is logged in to show its matches. If the user is not logged in, null will be returned which makes sure there are no matches visible.
+//       user: req.user
+//     });
+//   } else {
+//     res.redirect("login");
+//   }
+// } 
+var dataProfiles;
 async function homePageFunction(req, res) {
   const users = await UserModel.find({}).exec(); // Looking for all users in UserModel to make them available in a drop down in the header to switch users/accounts
-  
+
   if (req.user) {
-    res.render("index", {
-    // Rendering the index page
-      title: "Novel Love — Discover ", // Giving it a specific title for inside the head (used template for this in .hbs file)
-      users, // These are the users that are available in the drop down menu
-      matches: req.user ? req.user.matches : null, // Checking to see if a user is logged in to show its matches. If the user is not logged in, null will be returned which makes sure there are no matches visible.
-      user: req.user
-    });
+    console.log(req.user);
+    UserModel.find({"gender": req.user.lookingfor }, userData);
+  
+        function userData(err, userData){
+            console.log(userData)
+            dataProfiles = userData;
+            for (user = 0; user < userData.length; user++) {
+                var commonGenres = 0
+                for (i = 0; i < req.user.favoriteBooks.length; i++) {
+                    if(req.user.favoriteBooks[i] === userData[user].favoriteBooks[i]){
+                        commonGenres += 1
+                    }
+                }
+                console.log('jij en ' + userData[user].firstname + ' hebben ' + commonGenres + ' genres gemeen')
+                dataProfiles[user].commonGenres= commonGenres
+                dataProfiles.sort(function(a,b) {
+                    return b.commonGenres - a.commonGenres;
+                });
+                console.log(dataProfiles)
+  
+                }
+            res.render("index", {
+                match : dataProfiles,
+                title: "Novel Love — Discover ", // Giving it a specific title for inside the head (used template for this in .hbs file)
+                users, // These are the users that are available in the drop down menu
+                user: req.user });
+        }
+  
   } else {
     res.redirect("login");
   }
 }
+
+
+
+
 
 // Registration function //
 function registerFunction(req, res) {

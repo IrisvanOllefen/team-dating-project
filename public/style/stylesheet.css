@@ -264,6 +264,23 @@ header nav div img {
     flex-wrap: wrap;
 }
 
+.matches article {
+    padding: 20px;
+    margin: 15px;
+    background-color: var(--orange);
+    border-radius: 15px;
+    -webkit-box-shadow: 5px 5px 5px 0px rgba(224,224,224,1);
+    -moz-box-shadow: 5px 5px 5px 0px rgba(224,224,224,1);
+    box-shadow: 5px 5px 5px 0px rgba(224,224,224,1);
+
+}
+
+.matches article ul {
+    list-style: disc;
+    margin-left: 20px;
+    margin-top: -10px;
+}
+
 /* Media Queries */
 
 @media screen and (max-width:1200px) {
