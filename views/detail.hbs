@@ -1,0 +1,21 @@
+{{#> layout }}
+<main>
+    <section>
+        <div class="detail-page">
+            <h1>{{matchData.firstname}} {{matchData.lastname}}</h1>
+            <img src="/uploads/{{matchData.profilepicture}}" alt="">
+            <div class="info">
+            <p>Age: {{matchData.age}} </p>
+            <p>Gender: {{matchData.gender}} </p>
+            <p>Looking for: {{matchData.lookingfor}} </p>
+            <p><b>Favorite Genres</b></p>
+            <ul>
+                <li>{{matchData.favoriteBooks.[0]}}</li>
+                <li>{{matchData.favoriteBooks.[1]}}</li>
+                <li>{{matchData.favoriteBooks.[2]}}</li>
+            </ul>
+            </div>
+        </div>       
+    </section>
+</main>
+{{/layout}}

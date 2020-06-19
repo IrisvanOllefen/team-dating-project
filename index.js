@@ -10,6 +10,7 @@ const passport = require("passport"), // Passport
   FacebookStrategy = require("passport-facebook").Strategy, // Passport facebook strategy
   LocalStrategy = require("passport-local").Strategy; // Passport local strategy
 const UserModel = require("./models/user"); // Self-made user schema/model
+const find = require("array-find"); //array-find for searching the right detailpage
 
 // CONFIGURATING ENV FILE TO BLOCK SENSITIVE INFORMATION
 require("dotenv").config();
@@ -84,7 +85,8 @@ app
       successRedirect: "/",
       failureRedirect: "/login",
     })
-  );
+  )
+  .get("/:id", matchDetailPage);
 
 // CREATNG PARTIALS
 hbs.registerPartials(__dirname + "/views/partials", (error) => {
@@ -205,9 +207,15 @@ async function homePageFunction(req, res) {
             for (user = 0; user < userData.length; user++) {
                 var commonGenres = 0
                 for (i = 0; i < req.user.favoriteBooks.length; i++) {
-                    if(req.user.favoriteBooks[i] === userData[user].favoriteBooks[i]){
+                    if(req.user.favoriteBooks[i] === userData[user].favoriteBooks[0]){
                         commonGenres += 1
                     }
+                    if(req.user.favoriteBooks[i] === userData[user].favoriteBooks[1]){
+                      commonGenres += 1
+                  }
+                  if(req.user.favoriteBooks[i] === userData[user].favoriteBooks[2]){
+                    commonGenres += 1
+                }
                 }
                 console.log('jij en ' + userData[user].firstname + ' hebben ' + commonGenres + ' genres gemeen')
                 dataProfiles[user].commonGenres= commonGenres
@@ -227,6 +235,26 @@ async function homePageFunction(req, res) {
   } else {
     res.redirect("login");
   }
+}
+
+function matchDetailPage(req, res, next) {
+  console.log(dataProfiles);
+  var ID = req.params.id;
+  var profile = find(dataProfiles, function (value) {
+    console.log(value);
+    return value.id === ID;
+  });
+
+  if (!profile) {
+    next();
+    return;
+  }
+
+  console.log(profile);
+
+  res.render("detail", {
+    matchData: profile,
+  });
 }
 
 

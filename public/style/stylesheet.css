@@ -281,6 +281,32 @@ header nav div img {
     margin-top: -10px;
 }
 
+.detail-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+
+.detail-page img {
+    width: 70%;
+    max-width: 200px;
+    height: auto;
+    margin-top: 30px;
+}
+
+.detail-page p:last-of-type{
+    margin-top:50px;
+    color: var(--orange);
+    font-size: 18px;
+}
+
+.detail-page ul {
+    list-style: disc;
+    margin-left: 15px;
+}
+
 /* Media Queries */
 
 @media screen and (max-width:1200px) {
