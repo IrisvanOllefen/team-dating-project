@@ -26,6 +26,7 @@
 a {
     font-family: var(--main);
     color: #fff;
+    text-decoration: none;
 }
 
 body {
@@ -44,10 +45,6 @@ ul {
     list-style: none;
     padding-inline-start: 0;
     margin-block-start: 0;
-}
-
-a {
-    text-decoration: none;
 }
 
 h1 {
@@ -222,11 +219,44 @@ header nav div img {
     z-index: 90;
 }
 
+#books section div {
+    max-width: 100%;
+}
+
+#books section form {
+    display: flex;
+    flex-direction: row;
+    max-width: 100%;
+    justify-content: space-between;
+}
+
+#books section form>div:last-of-type {
+    margin-right: 2em;
+}
+
 #books section form select {
     padding: 0.5em 0.8em;
     margin: .5em 0;
     border: 1px solid #b8b8b8;
     border-radius: .2em;
+}
+
+#books section form>div:last-of-type label {
+    cursor: pointer;
+    padding: 1em 1.5em;
+    color: var(--orange);
+    border: 3px solid var(--orange);
+    text-align: center;
+}
+
+#books section form>div:last-of-type input {
+    display: none;
+}
+
+#books section form>div:last-of-type p, #picture-profile {
+    max-width: 50%;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .matches {

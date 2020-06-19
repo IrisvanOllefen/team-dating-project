@@ -56,7 +56,7 @@ app
   // .use(sessionFunction)
   .post("/registerform", registerFunction)
   .post("/loginform", loginFunction)
-  .post("/booksform", registerBooksFunction)
+  .post("/booksform", upload.single("profilepicture"), registerBooksFunction)
   .post("/signout", signOutUser)
   .post("/", passport.use)
   .post(
@@ -216,6 +216,7 @@ function registerFunction(req, res) {
 function registerBooksFunction(req, res, next) {
   req.session.user.favoriteBooks = req.body.genre;
   req.session.user.currentBook = req.body.currentBook;
+  req.session.user.profilepicture = req.file ? req.file.filename : null;
 
   const newUser = new UserModel(req.session.user);
 
