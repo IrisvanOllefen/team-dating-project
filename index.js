@@ -9,6 +9,7 @@ const bcrypt = require("bcrypt"); //Bcrypt hashing
 const passport = require("passport"), // Passport
   FacebookStrategy = require("passport-facebook").Strategy; // Passport facebook strategy
 const UserModel = require("./models/user"); // Self-made user schema/model
+const login = require("./routes/loginReq");
 
 // CONFIGURATING ENV FILE TO BLOCK SENSITIVE INFORMATION
 require("dotenv").config();
@@ -31,11 +32,11 @@ passport.use(
     {
       clientID: `${process.env.FACEBOOK_APP_ID}`,
       clientSecret: `${process.env.FACEBOOK_APP_SECRET}`,
-      callbackURL: "http://localhost:8000/auth/facebook/callback",
+      callbackURL: "http://localhost:8000/auth/facebook/callback"
     },
     async (accessToken, refreshToken, profile, done) => {
       const userByFacebookId = await UserModel.findOne({
-        facebookId: profile.id,
+        facebookId: profile.id
       }).exec();
 
       if (userByFacebookId) {
@@ -56,6 +57,7 @@ passport.use(
 const app = express();
 
 // CREATING SETUP ROUTES, POSTS AND GET REQUESTS
+
 app
   .set("view engine", "hbs") // The view engine is hbs (handlebars for express), this gives a res.render to render a file and send it to the browser.
   .use(express.static("public")) // Serving static files in the public map (things like images, the stylesheet, etc.)
@@ -65,13 +67,14 @@ app
     session({
       secret: "uir3948uri934i9320oi",
       resave: false,
-      saveUninitialized: true,
+      saveUninitialized: true
     })
   )
   .use(passport.initialize())
   .use(passport.session())
   // TODO: Zie comment bij sessionFunction
   // .use(sessionFunction)
+  .use("/login", login)
   .post("/registerform", registerFunction)
   .post("/loginform", loginFunction)
   .post("/booksform", registerBooksFunction)
@@ -81,7 +84,7 @@ app
     // upload.single("profilepicture"),
     editProfileActionFunction
   )
-  .get("/login", getLoginPage)
+  // .get("/login", getLoginPage)
   .get("/register", getRegisterPage)
   .get("/register/books", getRegisterBooksPage)
   .get("/", homePageFunction)
@@ -100,12 +103,12 @@ app
     "/auth/facebook/callback",
     passport.authenticate("facebook", {
       successRedirect: "/",
-      failureRedirect: "/login",
+      failureRedirect: "/login"
     })
   );
 
 // CREATNG PARTIALS
-hbs.registerPartials(__dirname + "/views/partials", (error) => {
+hbs.registerPartials(__dirname + "/views/partials", error => {
   // USING _dirname TO CREATE ABSOLUTE PATHS
   console.error(error);
 });
@@ -144,16 +147,10 @@ hbs.registerPartials(__dirname + "/views/partials", (error) => {
 // }
 
 //Get the login page
-function getLoginPage(req, res) {
-  console.log(req.user);
-  res.render("login", {
-    title: "Novel Love — Login",
-  });
-}
 
 function getRegisterPage(req, res) {
   res.render("register", {
-    title: "Novel Love — Register",
+    title: "Novel Love — Register"
   });
 }
 
@@ -173,11 +170,11 @@ async function homePageFunction(req, res) {
   const users = await UserModel.find({}).exec(); // Looking for all users in UserModel to make them available in a drop down in the header to switch users/accounts
   if (req.user) {
     res.render("index", {
-    // Rendering the index page
+      // Rendering the index page
       title: "Novel Love — Discover ", // Giving it a specific title for inside the head (used template for this in .hbs file)
       users, // These are the users that are available in the drop down menu
       matches: req.user ? req.user.matches : null, // Checking to see if a user is logged in to show its matches. If the user is not logged in, null will be returned which makes sure there are no matches visible.
-      user: req.session.user,
+      user: req.session.user
     });
   } else {
     res.redirect("/login");
@@ -199,7 +196,7 @@ function registerFunction(req, res) {
     lastname: req.body.lastname,
     age: req.body.age,
     gender: req.body.gender,
-    lookingfor: req.body.lookingfor,
+    lookingfor: req.body.lookingfor
   };
 
   res.redirect("register/books");
@@ -211,7 +208,7 @@ function registerBooksFunction(req, res, next) {
 
   const newUser = new UserModel(req.session.user);
 
-  newUser.save((err) => {
+  newUser.save(err => {
     if (err) {
       next(err);
     } else {
@@ -226,7 +223,7 @@ function loginFunction(req, res, next) {
   if (req.body.email && req.body.password) {
     UserModel.findOne(
       {
-        email: req.body.email,
+        email: req.body.email
       },
       (err, user) => {
         if (err) {
@@ -239,16 +236,16 @@ function loginFunction(req, res, next) {
               res.redirect("/login");
             } else {
               req.session.user = {
-                firstname: user.firstname,
+                firstname: user.firstname
               };
               res.redirect("/");
             }
           });
         }
-      });
+      }
+    );
   }
 }
-
 
 // EDIT PROFILE ROUTE
 async function editProfilePageFunction(req, res) {
@@ -262,7 +259,7 @@ async function editProfilePageFunction(req, res) {
     // Rendering the edit-profile page
     title: "Edit Profile Page", // Giving the page its own head title
     // Making sure it contains the req.user properties (name, age, etc.) in the input fields
-    user: req.user,
+    user: req.user
   });
 }
 
@@ -295,7 +292,7 @@ async function editProfileActionFunction(req, res) {
   res.render("edit-profile", {
     // Rendering the updated edit-profile page
     title: "Edit Profile Page",
-    user: req.user,
+    user: req.user
   });
 }
 
@@ -310,7 +307,7 @@ async function run() {
   await mongoose.connect(MONGO_URL, {
     // Avoiding deprecation warnings
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true
   });
 
   // The Express server will run on port 8000, or on another port given through the terminal (needed for deployment).
