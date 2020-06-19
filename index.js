@@ -4,10 +4,11 @@ const hbs = require("hbs"); // The templating tool
 const mongoose = require("mongoose"); // The database (MongoDB)
 const bodyParser = require("body-parser"); // Form input encoder
 const session = require("express-session"); // Sessions
-// const multer = require("multer"); // File uploads
+const multer = require("multer"); // File uploads
 const bcrypt = require("bcrypt"); //Bcrypt hashing
 const passport = require("passport"), // Passport
-  FacebookStrategy = require("passport-facebook").Strategy; // Passport facebook strategy
+  FacebookStrategy = require("passport-facebook").Strategy, // Passport facebook strategy
+  LocalStrategy = require("passport-local").Strategy; // Passport local strategy
 const UserModel = require("./models/user"); // Self-made user schema/model
 
 // CONFIGURATING ENV FILE TO BLOCK SENSITIVE INFORMATION
@@ -15,6 +16,81 @@ require("dotenv").config();
 
 // THE URL TO MY DATABASE
 const MONGO_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/test?retryWrites=true&w=majority`;
+
+// USING MULTER TO UPLOADING IMAGES TO PROFILES
+const upload = multer({
+  dest: "public/uploads/", // The destination folder for uploaded images
+  limits: { fileSize: 5000000 }, // Put a limit on the file size
+  fileFilter: function fileFilter(req, file, cb) {
+    // Creating a functtion to filter out allowed files with a callback
+    if (file.mimetype === "image/png") {
+      // Mimetypehas to be image/png, image/jpeg (or image/jpg) for the callback to return true
+      cb(null, true);
+    } else if (file.mimetype === "image/jpeg") {
+      cb(null, true);
+    } else {
+      // If the mimetype is anything else, the callback will return false
+      cb(null, false);
+    }
+  },
+});
+
+const app = express();
+
+// CREATING SETUP ROUTES, POSTS AND GET REQUESTS
+app
+  .set("view engine", "hbs") // The view engine is hbs (handlebars for express), this gives a res.render to render a file and send it to the browser.
+  .use(express.static("public")) // Serving static files in the public map (things like images, the stylesheet, etc.)
+  .use(bodyParser.urlencoded({ extended: false })) // bodyParser IS USED FO PARSE FORM DATA
+  .use(
+    // This middleware function makes it possible to save data (session data like a userId) inbetween requests.
+    session({
+      secret: "uir3948uri934i9320oi",
+      resave: false,
+      saveUninitialized: true,
+    })
+  )
+  .use(passport.initialize())
+  .use(passport.session())
+  // TODO: Zie comment bij sessionFunction
+  // .use(sessionFunction)
+  .post("/registerform", registerFunction)
+  .post("/loginform", loginFunction)
+  .post("/booksform", registerBooksFunction)
+  .post("/signout", signOutUser)
+  .post("/", passport.use)
+  .post(
+    "/edit-profile",
+    upload.single("profilepicture"),
+    editProfileActionFunction
+  )
+  .get("/login", getLoginPage)
+  .get("/register", getRegisterPage)
+  .get("/register/books", getRegisterBooksPage)
+  .get("/", homePageFunction)
+  .get("/edit-profile", editProfilePageFunction)
+  // Redirect the user to Facebook for authentication.  When complete,
+  // Facebook will redirect the user back to the application at
+  //     /auth/facebook/callback
+  .get("/auth/facebook", passport.authenticate("facebook"))
+
+  // Facebook will redirect the user to this URL after approval.  Finish the
+  // authentication process by attempting to obtain an access token.  If
+  // access was granted, the user will be logged in.  Otherwise,
+  // authentication has failed.
+  .get(
+    "/auth/facebook/callback",
+    passport.authenticate("facebook", {
+      successRedirect: "/",
+      failureRedirect: "/login",
+    })
+  );
+
+// CREATNG PARTIALS
+hbs.registerPartials(__dirname + "/views/partials", (error) => {
+  // USING _dirname TO CREATE ABSOLUTE PATHS
+  console.error(error);
+});
 
 passport.serializeUser(function (user, done) {
   done(null, user._id);
@@ -26,7 +102,7 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
-passport.use(
+passport.use("facebook",
   new FacebookStrategy(
     {
       clientID: `${process.env.FACEBOOK_APP_ID}`,
@@ -53,99 +129,30 @@ passport.use(
   )
 );
 
-const app = express();
-
-// CREATING SETUP ROUTES, POSTS AND GET REQUESTS
-app
-  .set("view engine", "hbs") // The view engine is hbs (handlebars for express), this gives a res.render to render a file and send it to the browser.
-  .use(express.static("public")) // Serving static files in the public map (things like images, the stylesheet, etc.)
-  .use(bodyParser.urlencoded({ extended: false })) // bodyParser IS USED FO PARSE FORM DATA
-  .use(
-    // This middleware function makes it possible to save data (session data like a userId) inbetween requests.
-    session({
-      secret: "uir3948uri934i9320oi",
-      resave: false,
-      saveUninitialized: true,
-    })
-  )
-  .use(passport.initialize())
-  .use(passport.session())
-  // TODO: Zie comment bij sessionFunction
-  // .use(sessionFunction)
-  .post("/registerform", registerFunction)
-  .post("/loginform", loginFunction)
-  .post("/booksform", registerBooksFunction)
-  .post("/signout", signOutUser)
-  .post(
-    "/edit-profile",
-    // upload.single("profilepicture"),
-    editProfileActionFunction
-  )
-  .get("/login", getLoginPage)
-  .get("/register", getRegisterPage)
-  .get("/register/books", getRegisterBooksPage)
-  .get("/", homePageFunction)
-  .post("/", passport.use)
-  .get("/edit-profile", editProfilePageFunction)
-  // Redirect the user to Facebook for authentication.  When complete,
-  // Facebook will redirect the user back to the application at
-  //     /auth/facebook/callback
-  .get("/auth/facebook", passport.authenticate("facebook"))
-
-  // Facebook will redirect the user to this URL after approval.  Finish the
-  // authentication process by attempting to obtain an access token.  If
-  // access was granted, the user will be logged in.  Otherwise,
-  // authentication has failed.
-  .get(
-    "/auth/facebook/callback",
-    passport.authenticate("facebook", {
-      successRedirect: "/",
-      failureRedirect: "/login",
-    })
-  );
-
-// CREATNG PARTIALS
-hbs.registerPartials(__dirname + "/views/partials", (error) => {
-  // USING _dirname TO CREATE ABSOLUTE PATHS
-  console.error(error);
-});
-
-// USING MULTER TO UPLOADING IMAGES TO PROFILES
-// const upload = multer({
-//   dest: "public/uploads/", // The destination folder for uploaded images
-//   limits: { fileSize: 5000000 }, // Put a limit on the file size
-//   fileFilter: function fileFilter(req, file, cb) {
-//     // Creating a functtion to filter out allowed files with a callback
-//     if (file.mimetype === "image/png") {
-//       // Mimetypehas to be image/png, image/jpeg (or image/jpg) for the callback to return true
-//       cb(null, true);
-//     } else if (file.mimetype === "image/jpeg") {
-//       cb(null, true);
-//     } else {
-//       // If the mimetype is anything else, the callback will return false
-//       cb(null, false);
-//     }
-//   },
-// });
-
-// MIDDLEWARE FUNCTIONS
-// Applying session middleware in an async function
-// TODO: Dit moet verwijderd worden om passport goed te kunnen gebruiken omdat passport req.user toevoegd
-// async function sessionFunction(req, res, next) {
-// if (req.session.userId) {
-//   const user = await UserModel.findById(req.session.userId) // All information about the logged in user will be available under req.user
-//     .populate("matches") // Populate is Mongoose Syntax and queries all matches from the user collection
-//     .exec(); // This is used to execute the query
-//   if (user) {
-//     req.user = user;
-//   }
-// }
-// next(); // Using next() to pass to the next query
-// }
+passport.use("local", new LocalStrategy({
+  usernameField: "email",
+  passwordField: "password"
+},
+function(username, password, done) {
+  UserModel.findOne({ email: username }, function(err, user) {
+    if(err) throw err;
+    if(!user){
+      return done(null, false, {message: "Unknown Email"});
+    }
+    bcrypt.compare(password, user.password, function(err, isMatch) {
+      if(err) throw err;
+      if(isMatch){
+        return done(null, user);
+      } else {
+        return done(null, false, {message: "Invalid password"});
+      }
+    });
+  });
+}
+));
 
 //Get the login page
 function getLoginPage(req, res) {
-  console.log(req.user);
   res.render("login", {
     title: "Novel Love — Login",
   });
@@ -171,16 +178,17 @@ function getRegisterBooksPage(req, res) {
 // ROUTE TO THE HOMEPAGE
 async function homePageFunction(req, res) {
   const users = await UserModel.find({}).exec(); // Looking for all users in UserModel to make them available in a drop down in the header to switch users/accounts
+  
   if (req.user) {
     res.render("index", {
     // Rendering the index page
       title: "Novel Love — Discover ", // Giving it a specific title for inside the head (used template for this in .hbs file)
       users, // These are the users that are available in the drop down menu
       matches: req.user ? req.user.matches : null, // Checking to see if a user is logged in to show its matches. If the user is not logged in, null will be returned which makes sure there are no matches visible.
-      user: req.session.user,
+      user: req.user
     });
   } else {
-    res.redirect("/login");
+    res.redirect("login");
   }
 }
 
@@ -221,38 +229,26 @@ function registerBooksFunction(req, res, next) {
 }
 
 // Login Function
-// TODO: Dit vervangen door passport localstrategy http://www.passportjs.org/docs/username-password/
 function loginFunction(req, res, next) {
-  if (req.body.email && req.body.password) {
-    UserModel.findOne(
-      {
-        email: req.body.email,
-      },
-      (err, user) => {
-        if (err) {
-          next(err);
-        } else {
-          bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
-            if (err) {
-              throw err;
-            } else if (!isMatch) {
-              res.redirect("/login");
-            } else {
-              req.session.user = {
-                firstname: user.firstname,
-              };
-              res.redirect("/");
-            }
-          });
-        }
-      });
-  }
+  passport.authenticate("local", function(err, user, info) {
+    if (err) { 
+      return next(err); 
+    }
+    if (!user) { 
+      console.log(info);
+      res.redirect("/login");
+    }
+    req.logIn(user, function(err) {
+      if (err) { 
+        return next(err); 
+      }
+      return res.redirect("/");
+    });
+  })(req, res, next);
 }
-
 
 // EDIT PROFILE ROUTE
 async function editProfilePageFunction(req, res) {
-  console.log(req.user);
   if (!req.user) {
     // If a user is not logged in, you will be redirected to the homepage
     res.redirect("/");

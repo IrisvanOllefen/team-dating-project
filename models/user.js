@@ -23,21 +23,28 @@ const UserSchema = new Schema({
 
 //Making sure the password gets hashed
 UserSchema.pre("save", function (next) {
-  next();
-  // let user = this;
-  // bcrypt.hash(user.password, 10, function (err, hash) {
-  //   if (err) {
-  //     return next(err);
-  //   } else {
-  //     user.password = hash;
-  //     next();
-  //   }
-  // });
+  let user = this;
+  bcrypt.hash(user.password, 10, function (err, hash) {
+    if (err) {
+      return next(err);
+    } else {
+      user.password = hash;
+      next();
+    }
+  });
 });
+
+
 
 // registers UserSchema with mongoose
 const UserModel = mongoose.model("User", UserSchema);
 
+module.exports.comparePassword = function(candidatePassword, hash, callback){
+  bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
+    if(err) throw err;
+    callback(null, isMatch);
+  });
+};
 // makes UserModel available to be required in my index.js
 module.exports = UserModel;
 
