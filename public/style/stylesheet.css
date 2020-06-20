@@ -60,6 +60,10 @@ section {
     max-width: 50%;
 }
 
+section.discover {
+    max-width: 80%;
+}
+
 header {
     display: flex;
     justify-content: center;
@@ -259,6 +263,12 @@ header nav div img {
     text-align: center;
 }
 
+/* Discover page */
+
+section.discover h1 {
+    font-size: 42px;
+}
+
 .matches {
     display: flex;
     flex-wrap: wrap;
@@ -281,13 +291,13 @@ header nav div img {
     margin-top: -10px;
 }
 
+/* detail-page */
+
 .detail-page {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
-
-
 
 .detail-page img {
     width: 70%;

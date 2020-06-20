@@ -201,36 +201,31 @@ async function homePageFunction(req, res) {
     console.log(req.user);
     UserModel.find({"gender": req.user.lookingfor }, userData);
   
-        function userData(err, userData){
-            console.log(userData)
-            dataProfiles = userData;
-            for (user = 0; user < userData.length; user++) {
-                var commonGenres = 0
-                for (i = 0; i < req.user.favoriteBooks.length; i++) {
-                    if(req.user.favoriteBooks[i] === userData[user].favoriteBooks[0]){
-                        commonGenres += 1
-                    }
-                    if(req.user.favoriteBooks[i] === userData[user].favoriteBooks[1]){
-                      commonGenres += 1
-                  }
-                  if(req.user.favoriteBooks[i] === userData[user].favoriteBooks[2]){
-                    commonGenres += 1
-                }
-                }
-                console.log('jij en ' + userData[user].firstname + ' hebben ' + commonGenres + ' genres gemeen')
-                dataProfiles[user].commonGenres= commonGenres
-                dataProfiles.sort(function(a,b) {
-                    return b.commonGenres - a.commonGenres;
-                });
-                console.log(dataProfiles)
-  
-                }
-            res.render("index", {
-                match : dataProfiles,
-                title: "Novel Love — Discover ", // Giving it a specific title for inside the head (used template for this in .hbs file)
-                users, // These are the users that are available in the drop down menu
-                user: req.user });
+    function userData(err, userData){
+      dataProfiles = userData;
+      var commonGenres = 0;
+      for (user = 0; user < dataProfiles.length; user++) {
+        
+        for (i = 0; i < req.user.favoriteBooks.length; i++) {
+          if(req.user.favoriteBooks[i] === userData[user].favoriteBooks[0] || req.user.favoriteBooks[i] === userData[user].favoriteBooks[1]|| req.user.favoriteBooks[i] === userData[user].favoriteBooks[2]){
+            commonGenres += 1
+          }
         }
+        console.log('jij en ' + userData[user].firstname + ' hebben ' + commonGenres + ' genres gemeen')
+        dataProfiles[user].commonGenres  = commonGenres;
+        dataProfiles.sort(function(a,b) {
+          return b.commonGenres - a.commonGenres;
+          }
+        );
+        commonGenres = 0;
+      }
+      
+      res.render("index", {
+        match : dataProfiles,
+        title: "Novel Love — Discover ", // Giving it a specific title for inside the head (used template for this in .hbs file)
+        user: req.user });
+      console.log(dataProfiles)
+    }
   
   } else {
     res.redirect("login");
