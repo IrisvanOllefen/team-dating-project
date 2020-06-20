@@ -104,7 +104,8 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
-passport.use("facebook",
+passport.use(
+  "facebook",
   new FacebookStrategy(
     {
       clientID: `${process.env.FACEBOOK_APP_ID}`,
@@ -131,27 +132,31 @@ passport.use("facebook",
   )
 );
 
-passport.use("local", new LocalStrategy({
-  usernameField: "email",
-  passwordField: "password"
-},
-function(username, password, done) {
-  UserModel.findOne({ email: username }, function(err, user) {
-    if(err) throw err;
-    if(!user){
-      return done(null, false, {message: "Unknown Email"});
+passport.use(
+  "local",
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+    },
+    function (username, password, done) {
+      UserModel.findOne({ email: username }, function (err, user) {
+        if (err) throw err;
+        if (!user) {
+          return done(null, false, { message: "Unknown Email" });
+        }
+        bcrypt.compare(password, user.password, function (err, isMatch) {
+          if (err) throw err;
+          if (isMatch) {
+            return done(null, user);
+          } else {
+            return done(null, false, { message: "Invalid password" });
+          }
+        });
+      });
     }
-    bcrypt.compare(password, user.password, function(err, isMatch) {
-      if(err) throw err;
-      if(isMatch){
-        return done(null, user);
-      } else {
-        return done(null, false, {message: "Invalid password"});
-      }
-    });
-  });
-}
-));
+  )
+);
 
 //Get the login page
 function getLoginPage(req, res) {
@@ -170,7 +175,7 @@ function getRegisterBooksPage(req, res) {
   if (req.session.user) {
     res.render("books", {
       title: "Novel Love — Register Books",
-      user: req.session.user
+      user: req.session.user,
     });
   } else {
     res.redirect("/register");
@@ -180,7 +185,7 @@ function getRegisterBooksPage(req, res) {
 // ROUTE TO THE HOMEPAGE
 // async function homePageFunction(req, res) {
 //   const users = await UserModel.find({}).exec(); // Looking for all users in UserModel to make them available in a drop down in the header to switch users/accounts
-  
+
 //   if (req.user) {
 //     res.render("index", {
 //     // Rendering the index page
@@ -192,46 +197,51 @@ function getRegisterBooksPage(req, res) {
 //   } else {
 //     res.redirect("login");
 //   }
-// } 
+// }
 var dataProfiles;
 async function homePageFunction(req, res) {
   const users = await UserModel.find({}).exec(); // Looking for all users in UserModel to make them available in a drop down in the header to switch users/accounts
 
   if (req.user) {
     console.log(req.user);
-    UserModel.find({"gender": req.user.lookingfor }, userData);
-  
-        function userData(err, userData){
-            console.log(userData)
-            dataProfiles = userData;
-            for (user = 0; user < userData.length; user++) {
-                var commonGenres = 0
-                for (i = 0; i < req.user.favoriteBooks.length; i++) {
-                    if(req.user.favoriteBooks[i] === userData[user].favoriteBooks[0]){
-                        commonGenres += 1
-                    }
-                    if(req.user.favoriteBooks[i] === userData[user].favoriteBooks[1]){
-                      commonGenres += 1
-                  }
-                  if(req.user.favoriteBooks[i] === userData[user].favoriteBooks[2]){
-                    commonGenres += 1
-                }
-                }
-                console.log('jij en ' + userData[user].firstname + ' hebben ' + commonGenres + ' genres gemeen')
-                dataProfiles[user].commonGenres= commonGenres
-                dataProfiles.sort(function(a,b) {
-                    return b.commonGenres - a.commonGenres;
-                });
-                console.log(dataProfiles)
-  
-                }
-            res.render("index", {
-                match : dataProfiles,
-                title: "Novel Love — Discover ", // Giving it a specific title for inside the head (used template for this in .hbs file)
-                users, // These are the users that are available in the drop down menu
-                user: req.user });
+    UserModel.find({ gender: req.user.lookingfor }, userData);
+
+    const userData = function (err, userData) {
+      console.log(userData);
+      dataProfiles = userData;
+      for (user = 0; user < userData.length; user++) {
+        var commonGenres = 0;
+        for (i = 0; i < req.user.favoriteBooks.length; i++) {
+          if (req.user.favoriteBooks[i] === userData[user].favoriteBooks[0]) {
+            commonGenres += 1;
+          }
+          if (req.user.favoriteBooks[i] === userData[user].favoriteBooks[1]) {
+            commonGenres += 1;
+          }
+          if (req.user.favoriteBooks[i] === userData[user].favoriteBooks[2]) {
+            commonGenres += 1;
+          }
         }
-  
+        console.log(
+          "jij en " +
+            userData[user].firstname +
+            " hebben " +
+            commonGenres +
+            " genres gemeen"
+        );
+        dataProfiles[user].commonGenres = commonGenres;
+        dataProfiles.sort(function (a, b) {
+          return b.commonGenres - a.commonGenres;
+        });
+        console.log(dataProfiles);
+      }
+      res.render("index", {
+        match: dataProfiles,
+        title: "Novel Love — Discover ", // Giving it a specific title for inside the head (used template for this in .hbs file)
+        users, // These are the users that are available in the drop down menu
+        user: req.user,
+      });
+    };
   } else {
     res.redirect("login");
   }
@@ -256,10 +266,6 @@ function matchDetailPage(req, res, next) {
     matchData: profile,
   });
 }
-
-
-
-
 
 // Registration function //
 function registerFunction(req, res) {
@@ -300,17 +306,17 @@ function registerBooksFunction(req, res, next) {
 
 // Login Function
 function loginFunction(req, res, next) {
-  passport.authenticate("local", function(err, user, info) {
-    if (err) { 
-      return next(err); 
+  passport.authenticate("local", function (err, user, info) {
+    if (err) {
+      return next(err);
     }
-    if (!user) { 
+    if (!user) {
       console.log(info);
       res.redirect("/login");
     }
-    req.logIn(user, function(err) {
-      if (err) { 
-        return next(err); 
+    req.logIn(user, function (err) {
+      if (err) {
+        return next(err);
       }
       return res.redirect("/");
     });
