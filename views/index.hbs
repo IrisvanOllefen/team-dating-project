@@ -1,14 +1,22 @@
 {{#> layout }}
 <main>
     <section>
-        <h1> Matches</h1>
+        <h1> Discover </h1>
         <p>Hi {{user.firstname}}</p>
         <div class="matches">
-            {{#each users}}
-            <article class="match">
-                <img src="/uploads/{{this.profilepicture}}" alt="Profile Picture" width="200">
-                <p>{{this.firstname}} {{this.lastname}}</p>
-            </article>
+            {{#each match}}
+            <a href="/{{this._id}}">
+                <article class="match">
+                    <img src="/uploads/{{this.profilepicture}}" alt="Profile Picture" width="200">
+                    <h3>{{this.firstname}} {{this.lastname}}</h3>
+                    <p><b>Favorite Genres</b></p>
+                    <ul>
+                        <li>{{this.favoriteBooks.[0]}}</li>
+                        <li>{{this.favoriteBooks.[1]}}</li>
+                        <li>{{this.favoriteBooks.[2]}}</li>
+                    </ul>
+                </article>
+            </a>
             {{/each}}
         </div>
     </section>
