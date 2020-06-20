@@ -10,7 +10,7 @@ const passport = require("passport"), // Passport
   FacebookStrategy = require("passport-facebook").Strategy, // Passport facebook strategy
   LocalStrategy = require("passport-local").Strategy; // Passport local strategy
 const UserModel = require("./models/user"); // Self-made user schema/model
-const find = require("array-find"); //array-find for searching the right detailpage
+const find = require("array-find"); //array-find for searching the right detailpage'
 
 // CONFIGURATING ENV FILE TO BLOCK SENSITIVE INFORMATION
 require("dotenv").config();
@@ -35,6 +35,7 @@ const upload = multer({
     }
   },
 });
+
 
 const app = express();
 
@@ -95,12 +96,12 @@ hbs.registerPartials(__dirname + "/views/partials", (error) => {
   console.error(error);
 });
 
-passport.serializeUser(function (user, done) {
+passport.serializeUser(function(user, done) {
   done(null, user._id);
 });
 
-passport.deserializeUser(function (id, done) {
-  UserModel.findById(id, function (err, user) {
+passport.deserializeUser(function(id, done) {
+  UserModel.findById(id, function(err, user) {
     done(err, user);
   });
 });
@@ -289,21 +290,23 @@ function registerBooksFunction(req, res, next) {
 
 // Login Function
 function loginFunction(req, res, next) {
-  passport.authenticate("local", function (err, user, info) {
+  passport.authenticate("local", function(err, user, info ) {
     if (err) {
-      return next(err);
+      res.redirect("/login");
+      return next(err); 
     }
     if (!user) {
-      console.log(info);
       res.redirect("/login");
+      console.log(info);
+    } else {  
+
+      req.logIn(user, function(err) {
+        if (err) { return res.send(err); }
+        res.redirect("/");
+      });
+
     }
-    req.logIn(user, function (err) {
-      if (err) {
-        return next(err);
-      }
-      return res.redirect("/");
-    });
-  })(req, res, next);
+  })(req, res, next); 
 }
 
 // EDIT PROFILE ROUTE
