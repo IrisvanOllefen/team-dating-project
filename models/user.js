@@ -24,24 +24,28 @@ const UserSchema = new Schema({
 //Making sure the password gets hashed
 UserSchema.pre("save", function (next) {
   let user = this;
-  bcrypt.hash(user.password, 10, function (err, hash) {
-    if (err) {
-      return next(err);
-    } else {
-      user.password = hash;
-      next();
-    }
-  });
+  if (user.password) {
+    bcrypt.hash(user.password, 10, function (err, hash) {
+      if (err) {
+        return next(err);
+      } else {
+        user.password = hash;
+        next();
+      }
+    });
+  } else {
+    next();
+  }
 });
 
-
+// the above should be ignored if logging in with facebook
 
 // registers UserSchema with mongoose
 const UserModel = mongoose.model("User", UserSchema);
 
-module.exports.comparePassword = function(candidatePassword, hash, callback){
-  bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
-    if(err) throw err;
+module.exports.comparePassword = function (candidatePassword, hash, callback) {
+  bcrypt.compare(candidatePassword, hash, function (err, isMatch) {
+    if (err) throw err;
     callback(null, isMatch);
   });
 };

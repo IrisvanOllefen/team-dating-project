@@ -204,14 +204,12 @@ async function homePageFunction(req, res) {
 
   if (req.user) {
     console.log(req.user);
-    UserModel.find({ gender: req.user.lookingfor }, userData);
-
     const userData = function (err, userData) {
       console.log(userData);
       dataProfiles = userData;
-      for (user = 0; user < userData.length; user++) {
+      for (let user = 0; user < userData.length; user++) {
         var commonGenres = 0;
-        for (i = 0; i < req.user.favoriteBooks.length; i++) {
+        for (let i = 0; i < req.user.favoriteBooks.length; i++) {
           if (req.user.favoriteBooks[i] === userData[user].favoriteBooks[0]) {
             commonGenres += 1;
           }
@@ -242,6 +240,7 @@ async function homePageFunction(req, res) {
         user: req.user,
       });
     };
+    UserModel.find({ gender: req.user.lookingfor }, userData);
   } else {
     res.redirect("login");
   }
