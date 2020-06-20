@@ -5,7 +5,7 @@
         <p>Hi {{user.firstname}}</p>
         <div class="matches">
             {{#each match}}
-            <a href="/{{this._id}}">
+            <a href="/profile/{{this._id}}">
                 <article class="match">
                     <img src="/uploads/{{this.profilepicture}}" alt="Profile Picture" width="200">
                     <h3>{{this.firstname}} {{this.lastname}}</h3>

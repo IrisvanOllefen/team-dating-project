@@ -70,6 +70,7 @@ app
   .get("/register/books", getRegisterBooksPage)
   .get("/", homePageFunction)
   .get("/edit-profile", editProfilePageFunction)
+  .get("/profile/:id", matchDetailPage)
   // Redirect the user to Facebook for authentication.  When complete,
   // Facebook will redirect the user back to the application at
   //     /auth/facebook/callback
@@ -85,8 +86,8 @@ app
       successRedirect: "/",
       failureRedirect: "/login",
     })
-  )
-  .get("/:id", matchDetailPage);
+  );
+
 
 // CREATNG PARTIALS
 hbs.registerPartials(__dirname + "/views/partials", (error) => {
@@ -175,40 +176,22 @@ function getRegisterBooksPage(req, res) {
   if (req.session.user) {
     res.render("books", {
       title: "Novel Love — Register Books",
-      user: req.session.user,
+      newUser: req.session.user,
     });
   } else {
     res.redirect("/register");
   }
 }
 
-// ROUTE TO THE HOMEPAGE
-// async function homePageFunction(req, res) {
-//   const users = await UserModel.find({}).exec(); // Looking for all users in UserModel to make them available in a drop down in the header to switch users/accounts
-
-//   if (req.user) {
-//     res.render("index", {
-//     // Rendering the index page
-//       title: "Novel Love — Discover ", // Giving it a specific title for inside the head (used template for this in .hbs file)
-//       users, // These are the users that are available in the drop down menu
-//       matches: req.user ? req.user.matches : null, // Checking to see if a user is logged in to show its matches. If the user is not logged in, null will be returned which makes sure there are no matches visible.
-//       user: req.user
-//     });
-//   } else {
-//     res.redirect("login");
-//   }
-// }
-var dataProfiles;
+let dataProfiles;
 async function homePageFunction(req, res) {
   const users = await UserModel.find({}).exec(); // Looking for all users in UserModel to make them available in a drop down in the header to switch users/accounts
 
   if (req.user) {
-    console.log(req.user);
     const userData = function (err, userData) {
-      console.log(userData);
       dataProfiles = userData;
       for (let user = 0; user < userData.length; user++) {
-        var commonGenres = 0;
+        let commonGenres = 0;
         for (let i = 0; i < req.user.favoriteBooks.length; i++) {
           if (req.user.favoriteBooks[i] === userData[user].favoriteBooks[0]) {
             commonGenres += 1;
@@ -247,23 +230,24 @@ async function homePageFunction(req, res) {
 }
 
 function matchDetailPage(req, res, next) {
-  console.log(dataProfiles);
-  var ID = req.params.id;
-  var profile = find(dataProfiles, function (value) {
-    console.log(value);
-    return value.id === ID;
-  });
+  if(req.user) {
+    let ID = req.params.id;
+    let profile = find(dataProfiles, function (value) {
+      return value.id === ID;
+    });
 
-  if (!profile) {
-    next();
-    return;
+    if (!profile) {
+      next();
+      return;
+    }
+
+    res.render("detail", {
+      matchData: profile,
+      user:req.user,
+    });
+  } else {
+    res.redirect("login");
   }
-
-  console.log(profile);
-
-  res.render("detail", {
-    matchData: profile,
-  });
 }
 
 // Registration function //
@@ -331,7 +315,7 @@ async function editProfilePageFunction(req, res) {
   }
   res.render("edit-profile", {
     // Rendering the edit-profile page
-    title: "Edit Profile Page", // Giving the page its own head title
+    title: "Novel Love — Edit Profile", // Giving the page its own head title
     // Making sure it contains the req.user properties (name, age, etc.) in the input fields
     user: req.user,
   });
