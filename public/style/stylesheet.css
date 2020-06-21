@@ -1,344 +1,372 @@
 /* Add styles here! */
 
-@import url('https://fonts.googleapis.com/css?family=Red+Hat+Display&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,700;1,500&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Red+Hat+Display&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,700;1,500&display=swap");
 /* Global Styling */
 
-*, ::before, ::after {
-    box-sizing: border-box;
-    font-family: var(--main);
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  font-family: var(--main);
 }
 
 :root {
-    --orange: #F79D65;
-    --light-orange: #F7B267;
-    --dark-orange: #F4845F;
-    --light-red: #F27058;
-    --dark-red: #F25C54;
-    --steel-blue: #5B85AA;
-    --purple-navy: #414770;
-    --black: #000000;
-    --white: #FFFFFF;
-    --main: "Red Hat Display", sans-serif;
-    --secondary: "Zilla Slab", sans-serif;
+  --orange: #f79d65;
+  --light-orange: #f7b267;
+  --dark-orange: #f4845f;
+  --light-red: #f27058;
+  --dark-red: #f25c54;
+  --steel-blue: #5b85aa;
+  --purple-navy: #414770;
+  --black: #000000;
+  --white: #ffffff;
+  --main: "Red Hat Display", sans-serif;
+  --secondary: "Zilla Slab", sans-serif;
 }
 
 a {
-    font-family: var(--main);
-    color: #fff;
-    text-decoration: none;
+  font-family: var(--main);
+  color: #fff;
+  text-decoration: none;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    position: relative;
-    background-color: var(--orange);
-    margin-top: 2em;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  background-color: var(--orange);
+  margin-top: 2em;
 }
 
 button:focus {
-    outline: none;
+  outline: none;
 }
 
 ul {
-    list-style: none;
-    padding-inline-start: 0;
-    margin-block-start: 0;
+  list-style: none;
+  padding-inline-start: 0;
+  margin-block-start: 0;
 }
 
 h1 {
-    margin: 0;
-    font-family: var(--main);
+  margin: 0;
+  font-family: var(--main);
 }
 
 section {
-    background-color: var(--white);
-    margin: 2em auto;
-    padding: 3em 2em;
-    border-radius: 2em;
-    max-width: 50%;
+  background-color: var(--white);
+  margin: 2em auto;
+  padding: 3em 2em;
+  border-radius: 2em;
+  max-width: 50%;
 }
 
 section.discover {
-    max-width: 80%;
+  max-width: 80%;
 }
 
 header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 header h1 {
-    text-align: center;
-    font-size: 2.5em;
+  text-align: center;
+  font-size: 2.5em;
 }
 
-header nav>div {
-    margin-top: 1.5em;
+header nav > div {
+  margin-top: 1.5em;
 }
 
-header nav>div ul {
-    width: 275px;
-    justify-content: space-between;
-    display: flex;
-    flex-wrap: wrap;
+header nav > div ul {
+  width: 315px;
+  justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-header nav>div ul li, header nav>div ul button {
-    background-color: #fff;
-    padding: 1em;
-    border-radius: 100%;
-    width: 60px;
-    height: 60px;
-    text-align: center;
-    border: none;
-    cursor: pointer;
+header nav > div ul li,
+header nav > div ul button {
+  background-color: #fff;
+  padding: 1em;
+  border-radius: 100%;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
 }
 
 header nav div img {
-    width: 1.5em;
+  width: 1.5em;
 }
 
 /* Login Page */
 
-#login section, #register section {
-    display: flex;
-    justify-content: space-between;
+#login section,
+#register section {
+  display: flex;
+  justify-content: space-between;
 }
 
-#login section>div, #register section>div {
-    flex: 0 50%;
+#login section > div,
+#register section > div {
+  flex: 0 50%;
 }
 
 #login section form {
-    display: flex;
-    flex-direction: column;
-    border-bottom: 1px solid var(--orange);
-    padding-bottom: 1em;
-    max-width: 50%;
-    margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--orange);
+  padding-bottom: 1em;
+  max-width: 50%;
+  margin: 0 auto;
 }
 
-#login section form label, #register section form label, #books section form label {
-    font-family: var(--secondary);
-    margin-bottom: .5em;
+#login section form label,
+#register section form label,
+#books section form label {
+  font-family: var(--secondary);
+  margin-bottom: 0.5em;
 }
 
-#login section form input, #register section form input, #books section form input {
-    margin-bottom: 1.2em;
-    height: 35px;
-    border: 1px solid #b8b8b8;
-    border-radius: .2em;
-    padding-left: .5em;
+#login section form input,
+#register section form input,
+#books section form input {
+  margin-bottom: 1.2em;
+  height: 35px;
+  border: 1px solid #b8b8b8;
+  border-radius: 0.2em;
+  padding-left: 0.5em;
 }
 
 #login section form button {
-    text-decoration: none;
-    border: none;
-    font-size: 1em;
-    outline: none;
-    background-color: white;
-    cursor: pointer;
-    border: 1px solid var(--orange);
-    padding: .6em;
+  text-decoration: none;
+  border: none;
+  font-size: 1em;
+  outline: none;
+  background-color: white;
+  cursor: pointer;
+  border: 1px solid var(--orange);
+  padding: 0.6em;
 }
 
-#login section div:first-of-type p, #register section div:first-of-type p, #books section div p {
-    font-family: var(--secondary);
+#login section div:first-of-type p,
+#register section div:first-of-type p,
+#books section div p {
+  font-family: var(--secondary);
 }
 
-#login section div:first-of-type a, #register section div:first-of-type a {
-    color: var(--orange);
+#login section div:first-of-type a,
+#register section div:first-of-type a {
+  color: var(--orange);
 }
 
-#login section div:last-of-type>p {
-    text-align: center;
+#login section div:last-of-type > p {
+  text-align: center;
 }
 
 #login section div:last-of-type p:last-of-type {
-    margin-top: 2em;
+  margin-top: 2em;
 }
 
-#login section div:last-of-type a, #register section form button, #books section form button {
-    text-decoration: none;
-    color: var(--white);
-    background-color: var(--orange);
-    border: 1px solid var(--orange);
-    padding: .7em 2em;
+#login section div:last-of-type a,
+#register section form button,
+#books section form button {
+  text-decoration: none;
+  color: var(--white);
+  background-color: var(--orange);
+  border: 1px solid var(--orange);
+  padding: 0.7em 2em;
 }
 
 /* Register Page */
 
-#register section>div:last-of-type {
-    margin-left: 6em;
+#register section > div:last-of-type {
+  margin-left: 6em;
 }
 
-#register section form, #books section form, #books section div {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 1em;
-    max-width: 70%;
+#register section form,
+#books section form,
+#books section div {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1em;
+  max-width: 70%;
 }
 
 #register form ul {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 #register form li {
-    margin: .6em .7em .3em 0;
-    width: 80px;
-    height: 50px;
-    position: relative;
-    text-align: center;
+  margin: 0.6em 0.7em 0.3em 0;
+  width: 80px;
+  height: 50px;
+  position: relative;
+  text-align: center;
 }
 
-#register form ul li label, #register form ul li input {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+#register form ul li label,
+#register form ul li input {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 #register form input[type="radio"] {
-    opacity: 0.01;
-    z-index: 100;
+  opacity: 0.01;
+  z-index: 100;
 }
 
-#register input[type="radio"]:checked+label, .checked+label {
-    background-color: var(--orange);
-    color: var(--white);
-    transition: .3s;
+#register input[type="radio"]:checked + label,
+.checked + label {
+  background-color: var(--orange);
+  color: var(--white);
+  transition: 0.3s;
 }
 
 #register form .radios label:not(:first-child) {
-    padding: 13px 5px 5px 5px;
-    border: 1px solid var(--orange);
-    cursor: pointer;
-    z-index: 90;
+  padding: 13px 5px 5px 5px;
+  border: 1px solid var(--orange);
+  cursor: pointer;
+  z-index: 90;
 }
 
 #books section div {
-    max-width: 100%;
+  max-width: 100%;
 }
 
 #books section form {
-    display: flex;
-    flex-direction: row;
-    max-width: 100%;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  max-width: 100%;
+  justify-content: space-between;
 }
 
-#books section form>div:last-of-type {
-    margin-right: 2em;
+#books section form > div:last-of-type {
+  margin-right: 2em;
 }
 
 #books section form select {
-    padding: 0.5em 0.8em;
-    margin: .5em 0;
-    border: 1px solid #b8b8b8;
-    border-radius: .2em;
+  padding: 0.5em 0.8em;
+  margin: 0.5em 0;
+  border: 1px solid #b8b8b8;
+  border-radius: 0.2em;
 }
 
-#books section form>div:last-of-type label {
-    cursor: pointer;
-    padding: 1em 1.5em;
-    color: var(--orange);
-    border: 3px solid var(--orange);
-    text-align: center;
+#books section form > div:last-of-type label {
+  cursor: pointer;
+  padding: 1em 1.5em;
+  color: var(--orange);
+  border: 3px solid var(--orange);
+  text-align: center;
 }
 
-#books section form>div:last-of-type input {
-    display: none;
+#books section form > div:last-of-type input {
+  display: none;
 }
 
-#books section form>div:last-of-type p, #picture-profile {
-    max-width: 50%;
-    margin: 0 auto;
-    text-align: center;
+#books section form > div:last-of-type p,
+#picture-profile {
+  max-width: 50%;
+  margin: 0 auto;
+  text-align: center;
 }
 
 /* Discover page */
 
 section.discover h1 {
-    font-size: 42px;
+  font-size: 42px;
 }
 
 .matches {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .matches article {
-    padding: 20px;
-    margin: 15px;
-    background-color: var(--orange);
-    border-radius: 15px;
-    -webkit-box-shadow: 5px 5px 5px 0px rgba(224,224,224,1);
-    -moz-box-shadow: 5px 5px 5px 0px rgba(224,224,224,1);
-    box-shadow: 5px 5px 5px 0px rgba(224,224,224,1);
-
+  padding: 20px;
+  margin: 15px;
+  background-color: var(--orange);
+  border-radius: 15px;
+  -webkit-box-shadow: 5px 5px 5px 0px rgba(224, 224, 224, 1);
+  -moz-box-shadow: 5px 5px 5px 0px rgba(224, 224, 224, 1);
+  box-shadow: 5px 5px 5px 0px rgba(224, 224, 224, 1);
 }
 
 .matches article ul {
-    list-style: disc;
-    margin-left: 20px;
-    margin-top: -10px;
+  list-style: disc;
+  margin-left: 20px;
+  margin-top: -10px;
 }
 
 /* detail-page */
 
 .detail-page {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .detail-page img {
-    width: 70%;
-    max-width: 200px;
-    height: auto;
-    margin-top: 30px;
+  width: 70%;
+  max-width: 200px;
+  height: auto;
+  margin-top: 30px;
 }
 
-.detail-page p:last-of-type{
-    margin-top:50px;
-    color: var(--orange);
-    font-size: 18px;
+.detail-page p:last-of-type {
+  margin-top: 50px;
+  color: var(--orange);
+  font-size: 18px;
 }
 
 .detail-page ul {
-    list-style: disc;
-    margin-left: 15px;
+  list-style: disc;
+  margin-left: 15px;
+}
+
+#likeButton {
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* Media Queries */
 
-@media screen and (max-width:1200px) {
-    #login section, #register section {
-        flex-direction: column;
-        justify-content: flex-start;
-    }
-    #register section>div:last-of-type {
-        margin-left: 0;
-    }
+@media screen and (max-width: 1200px) {
+  #login section,
+  #register section {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  #register section > div:last-of-type {
+    margin-left: 0;
+  }
 }
 
-@media screen and (max-width:992px) {
-    section {
-        max-width: 70%;
-    }
+@media screen and (max-width: 992px) {
+  section {
+    max-width: 70%;
+  }
 }
 
-@media screen and (max-width:768px) {
-    #register section form {
-        max-width: 100%;
-    }
+@media screen and (max-width: 768px) {
+  #register section form {
+    max-width: 100%;
+  }
 }
 
-@media screen and (max-width:576px) {}
+@media screen and (max-width: 576px) {
+}
