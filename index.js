@@ -53,8 +53,6 @@ app
   )
   .use(passport.initialize())
   .use(passport.session())
-  // TODO: Zie comment bij sessionFunction
-  // .use(sessionFunction)
   .post("/registerform", registerFunction)
   .post("/loginform", loginFunction)
   .post("/booksform", upload.single("profilepicture"), registerBooksFunction)
@@ -252,12 +250,6 @@ function matchDetailPage(req, res, next) {
 
 // Registration function //
 function registerFunction(req, res) {
-  // const user = await UserModel.findById(req.body.userId).exec(); // Checking if the provided user exists in the database.
-  // if (user) {
-  //   // If the user exits in the database, the userId will be set and the session variable will be returned to the user.
-  //   req.session.userId = user._id; // Using user._id because the user._id in the database is more reliable than the req.body.userId in the body itself because that one comes from the user.
-  // }
-
   req.session.user = {
     email: req.body.email,
     password: req.body.password,
