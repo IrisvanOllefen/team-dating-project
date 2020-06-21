@@ -11,6 +11,8 @@ const passport = require("passport"), // Passport
   LocalStrategy = require("passport-local").Strategy; // Passport local strategy
 const UserModel = require("./models/user"); // Self-made user schema/model
 const find = require("array-find"); //array-find for searching the right detailpage'
+const flash = require("connect-flash");
+
 
 // CONFIGURATING ENV FILE TO BLOCK SENSITIVE INFORMATION
 require("dotenv").config();
@@ -54,6 +56,7 @@ app
   )
   .use(passport.initialize())
   .use(passport.session())
+  .use(flash())
   .post("/registerform", registerFunction)
   .post("/loginform", loginFunction)
   .post("/booksform", upload.single("profilepicture"), registerBooksFunction)
@@ -162,6 +165,7 @@ passport.use(
 function getLoginPage(req, res) {
   res.render("login", {
     title: "Novel Love — Login",
+    message: req.flash("error") 
   });
 }
 
@@ -282,23 +286,9 @@ function registerBooksFunction(req, res, next) {
 
 // Login Function
 function loginFunction(req, res, next) {
-  passport.authenticate("local", function(err, user, info ) {
-    if (err) {
-      res.redirect("/login");
-      return next(err); 
-    }
-    if (!user) {
-      res.redirect("/login");
-      console.log(info);
-    } else {  
-
-      req.logIn(user, function(err) {
-        if (err) { return res.send(err); }
-        res.redirect("/");
-      });
-
-    }
-  })(req, res, next); 
+  passport.authenticate("local", { failureRedirect: "/login",
+    successRedirect: "/", failureFlash: true }
+  )(req, res, next); 
 }
 
 // EDIT PROFILE ROUTE
