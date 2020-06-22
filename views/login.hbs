@@ -12,6 +12,9 @@
         </div>
         <div>
             <form method="POST" action="/loginform" id="login">
+                {{#if message}}
+                <p id="loginerror">{{message}}</p>
+                {{/if}}
                 <label for="email">E-mail</label>
                 <input required type="email" id="email" name="email" autocomplete="off">
                 <label for="password">Password</label>

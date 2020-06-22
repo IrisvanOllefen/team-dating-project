@@ -10,7 +10,9 @@ const passport = require("passport"), // Passport
   FacebookStrategy = require("passport-facebook").Strategy, // Passport facebook strategy
   LocalStrategy = require("passport-local").Strategy; // Passport local strategy
 const UserModel = require("./models/user"); // Self-made user schema/model
-const find = require("array-find"); //array-find for searching the right detailpage
+const find = require("array-find"); //array-find for searching the right detailpage'
+const flash = require("connect-flash");
+
 
 // CONFIGURATING ENV FILE TO BLOCK SENSITIVE INFORMATION
 require("dotenv").config();
@@ -36,6 +38,7 @@ const upload = multer({
   }
 });
 
+
 const app = express();
 
 // CREATING SETUP ROUTES, POSTS AND GET REQUESTS
@@ -53,9 +56,7 @@ app
   )
   .use(passport.initialize())
   .use(passport.session())
-
-  // TODO: Zie comment bij sessionFunction
-  // .use(sessionFunction)
+  .use(flash())
   .post("/registerform", registerFunction)
   .post("/loginform", loginFunction)
   .post("/booksform", upload.single("profilepicture"), registerBooksFunction)
@@ -100,12 +101,12 @@ hbs.registerPartials(__dirname + "/views/partials", error => {
   console.error(error);
 });
 
-passport.serializeUser(function (user, done) {
+passport.serializeUser(function(user, done) {
   done(null, user._id);
 });
 
-passport.deserializeUser(function (id, done) {
-  UserModel.findById(id, function (err, user) {
+passport.deserializeUser(function(id, done) {
+  UserModel.findById(id, function(err, user) {
     done(err, user);
   });
 });
@@ -167,7 +168,8 @@ passport.use(
 //Get the login page
 function getLoginPage(req, res) {
   res.render("login", {
-    title: "Novel Love — Login"
+    title: "Novel Love — Login",
+    message: req.flash("error") 
   });
 }
 
@@ -277,12 +279,6 @@ function renderMatches(req, res) {
 
 // Registration function //
 function registerFunction(req, res) {
-  // const user = await UserModel.findById(req.body.userId).exec(); // Checking if the provided user exists in the database.
-  // if (user) {
-  //   // If the user exits in the database, the userId will be set and the session variable will be returned to the user.
-  //   req.session.userId = user._id; // Using user._id because the user._id in the database is more reliable than the req.body.userId in the body itself because that one comes from the user.
-  // }
-
   req.session.user = {
     email: req.body.email,
     password: req.body.password,
@@ -314,21 +310,9 @@ function registerBooksFunction(req, res, next) {
 
 // Login Function
 function loginFunction(req, res, next) {
-  passport.authenticate("local", function (err, user, info) {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      console.log(info);
-      res.redirect("/login");
-    }
-    req.logIn(user, function (err) {
-      if (err) {
-        return next(err);
-      }
-      return res.redirect("/");
-    });
-  })(req, res, next);
+  passport.authenticate("local", { failureRedirect: "/login",
+    successRedirect: "/", failureFlash: true }
+  )(req, res, next); 
 }
 
 // EDIT PROFILE ROUTE
@@ -367,15 +351,19 @@ async function editProfileActionFunction(req, res) {
   if (req.file) {
     req.user.profilepicture = req.file.filename; // Profile picture
   }
-  req.user.name = req.body.name; // Name
-  req.user.age = req.body.age; // Age
-  req.user.favoriteBooks = req.body.books; // Array of top 3 books
-  req.user.currentBook = req.body.currentBook; // Currently reading book
-  await req.user.save(); // Save button
+  req.user.firstname = req.body.firstname; 
+  req.user.lastname = req.body.lastname; 
+  req.user.age = req.body.age; 
+  req.user.email = req.body.email; 
+  if(req.body.password) {
+    req.user.password = req.body.password; 
+  }
+  req.user.favoriteBooks = req.body.genre; 
+  req.user.currentBook = req.body.currentBook; 
+  await req.user.save(); 
   res.render("edit-profile", {
-    // Rendering the updated edit-profile page
-    title: "Edit Profile Page",
-    user: req.user
+    title: "Novel Love — Edit Profile",
+    user: req.user,
   });
 }
 
