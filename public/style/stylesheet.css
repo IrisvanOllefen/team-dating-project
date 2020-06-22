@@ -105,6 +105,10 @@ header nav div img {
   width: 1.5em;
 }
 
+header nav ul li img {
+    max-width: 12em;
+}
+
 /* Login Page */
 
 #login section,

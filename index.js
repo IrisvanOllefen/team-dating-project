@@ -43,11 +43,10 @@ const app = express();
 
 // CREATING SETUP ROUTES, POSTS AND GET REQUESTS
 app
-  .set("view engine", "hbs") // The view engine is hbs (handlebars for express), this gives a res.render to render a file and send it to the browser.
-  .use(express.static("public")) // Serving static files in the public map (things like images, the stylesheet, etc.)
-  .use(bodyParser.urlencoded({ extended: false })) // bodyParser IS USED FO PARSE FORM DATA
+  .set("view engine", "hbs") 
+  .use(express.static("public")) 
+  .use(bodyParser.urlencoded({ extended: false }))
   .use(
-    // This middleware function makes it possible to save data (session data like a userId) inbetween requests.
     session({
       secret: "uir3948uri934i9320oi",
       resave: false,
@@ -73,7 +72,8 @@ app
   .get("/login", getLoginPage)
   .get("/register", getRegisterPage)
   .get("/register/books", getRegisterBooksPage)
-  .get("/", homePageFunction)
+  .get("/", getHomePage)
+  .get("/discover", getDiscoverPage)
   .get("/edit-profile", editProfilePageFunction)
   .get("/profile/:id", matchDetailPage)
   .get("/matches", renderMatches) //look at this one later
@@ -90,14 +90,13 @@ app
   .get(
     "/auth/facebook/callback",
     passport.authenticate("facebook", {
-      successRedirect: "/",
-      failureRedirect: "/login"
+      successRedirect: "/discover",
+      failureRedirect: "/login",
     })
   );
 
 // CREATNG PARTIALS
-hbs.registerPartials(__dirname + "/views/partials", error => {
-  // USING _dirname TO CREATE ABSOLUTE PATHS
+hbs.registerPartials(__dirname + "/views/partials", (error) => {
   console.error(error);
 });
 
@@ -165,6 +164,10 @@ passport.use(
   )
 );
 
+function getHomePage(req, res) {
+  res.sendFile(__dirname + "/index.html");
+}
+
 //Get the login page
 function getLoginPage(req, res) {
   res.render("login", {
@@ -206,9 +209,7 @@ function liken(req) {
 }
 
 let dataProfiles;
-async function homePageFunction(req, res) {
-  const users = await UserModel.find({}).exec(); // Looking for all users in UserModel to make them available in a drop down in the header to switch users/accounts
-
+async function getDiscoverPage(req, res) {
   if (req.user) {
     const userData = function (err, userData) {
       dataProfiles = userData;
@@ -238,11 +239,10 @@ async function homePageFunction(req, res) {
         });
         console.log(dataProfiles);
       }
-      res.render("index", {
+      res.render("discover", {
         match: dataProfiles,
-        title: "Novel Love — Discover ", // Giving it a specific title for inside the head (used template for this in .hbs file)
-        users, // These are the users that are available in the drop down menu
-        user: req.user
+        title: "Novel Love — Discover ",
+        user: req.user,
       });
     };
     UserModel.find({ gender: req.user.lookingfor }, userData);
@@ -303,7 +303,7 @@ function registerBooksFunction(req, res, next) {
     if (err) {
       next(err);
     } else {
-      res.redirect("/");
+      res.redirect("/discover");
     }
   });
 }
@@ -311,15 +311,14 @@ function registerBooksFunction(req, res, next) {
 // Login Function
 function loginFunction(req, res, next) {
   passport.authenticate("local", { failureRedirect: "/login",
-    successRedirect: "/", failureFlash: true }
+    successRedirect: "/discover", failureFlash: true }
   )(req, res, next); 
 }
 
 // EDIT PROFILE ROUTE
 async function editProfilePageFunction(req, res) {
   if (!req.user) {
-    // If a user is not logged in, you will be redirected to the homepage
-    res.redirect("/");
+    res.redirect("/login");
     return;
   }
   res.render("edit-profile", {
@@ -332,32 +331,28 @@ async function editProfilePageFunction(req, res) {
 
 // POST METHOD ROUTE ON EDIT-PROFILE
 async function editProfileActionFunction(req, res) {
-  // Used for multiple things, one of them is making uploading pictures possible
   if (!req.user) {
-    // If the user is not logged in, the user will be redirected to the homepage.
-    res.redirect("/");
+    res.redirect("/login");
     return;
   }
 
   // MAKING A DELETE ACCOUNT BUTTON AVAILABLE
   if (req.body.deleteAccount === "on") {
-    // If the checkbox is checked on
-    await UserModel.deleteOne({ _id: req.user._id }), req.session.destroy(); // Deleting the user connected to the ID and then destroying the session.
-    res.redirect("/"); // Afterwards, the user will be redirected to the homepage
+    await UserModel.deleteOne({ _id: req.user._id }), req.session.destroy(); 
+    res.redirect("/login"); 
     return;
   }
 
-  // All information that is received through req.body using body-parser will be stored inside req.user and placed inside the database.
   if (req.file) {
-    req.user.profilepicture = req.file.filename; // Profile picture
+    req.user.profilepicture = req.file.filename; 
+  }
+  if(req.body.password) {
+    req.user.password = req.body.password; 
   }
   req.user.firstname = req.body.firstname; 
   req.user.lastname = req.body.lastname; 
   req.user.age = req.body.age; 
   req.user.email = req.body.email; 
-  if(req.body.password) {
-    req.user.password = req.body.password; 
-  }
   req.user.favoriteBooks = req.body.genre; 
   req.user.currentBook = req.body.currentBook; 
   await req.user.save(); 
