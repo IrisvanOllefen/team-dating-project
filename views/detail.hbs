@@ -18,10 +18,9 @@
                 <div id="likeButton">
                     
             <label for="">
-                <form action="/like" method="POST" enctype="multipart/form-data">
-                <img src="../images/likes.png" alt="likes" width="100px">
-                <input class="goButton" type="submit" name="like" value="{{matchData._id}}" />
-                </form>
+                <form action="/like" method="POST">
+                <input type="hidden" value="{{matchData._id}}" name="like">
+                <button>Like</button> </form>
 
                 
             </label>

@@ -188,12 +188,19 @@ function getRegisterBooksPage(req, res) {
   }
 }
 
-function liken(req, res) {
-  let likedUser = mongoose.Types.ObjectId(req.body.like);
-  let matchesLiked = [];
-  let id = req.params.id;
-  matchesLiked.push(id);
-  console.log(likedUser);
+function liken(req) {
+  let likedUser = req.body.like;
+  UserModel.updateOne(
+    { _id: req.user._id },
+    { $push: { matches: likedUser } },
+    function (error, success) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(req.user.matches);
+      }
+    }
+  );
 }
 
 let dataProfiles;
