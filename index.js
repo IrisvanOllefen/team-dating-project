@@ -35,7 +35,7 @@ const upload = multer({
       // If the mimetype is anything else, the callback will return false
       cb(null, false);
     }
-  },
+  }
 });
 
 
@@ -51,7 +51,7 @@ app
     session({
       secret: "uir3948uri934i9320oi",
       resave: false,
-      saveUninitialized: true,
+      saveUninitialized: true
     })
   )
   .use(passport.initialize())
@@ -61,18 +61,23 @@ app
   .post("/loginform", loginFunction)
   .post("/booksform", upload.single("profilepicture"), registerBooksFunction)
   .post("/signout", signOutUser)
+  .post("/like", liken)
   .post("/", passport.use)
   .post(
     "/edit-profile",
     upload.single("profilepicture"),
     editProfileActionFunction
   )
+  //.post("/likes", likeUser)
+
   .get("/login", getLoginPage)
   .get("/register", getRegisterPage)
   .get("/register/books", getRegisterBooksPage)
   .get("/", homePageFunction)
   .get("/edit-profile", editProfilePageFunction)
   .get("/profile/:id", matchDetailPage)
+  .get("/matches", renderMatches) //look at this one later
+
   // Redirect the user to Facebook for authentication.  When complete,
   // Facebook will redirect the user back to the application at
   //     /auth/facebook/callback
@@ -86,13 +91,12 @@ app
     "/auth/facebook/callback",
     passport.authenticate("facebook", {
       successRedirect: "/",
-      failureRedirect: "/login",
+      failureRedirect: "/login"
     })
   );
 
-
 // CREATNG PARTIALS
-hbs.registerPartials(__dirname + "/views/partials", (error) => {
+hbs.registerPartials(__dirname + "/views/partials", error => {
   // USING _dirname TO CREATE ABSOLUTE PATHS
   console.error(error);
 });
@@ -113,11 +117,11 @@ passport.use(
     {
       clientID: `${process.env.FACEBOOK_APP_ID}`,
       clientSecret: `${process.env.FACEBOOK_APP_SECRET}`,
-      callbackURL: "http://localhost:8000/auth/facebook/callback",
+      callbackURL: "http://localhost:8000/auth/facebook/callback"
     },
     async (accessToken, refreshToken, profile, done) => {
       const userByFacebookId = await UserModel.findOne({
-        facebookId: profile.id,
+        facebookId: profile.id
       }).exec();
 
       if (userByFacebookId) {
@@ -140,7 +144,7 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
-      passwordField: "password",
+      passwordField: "password"
     },
     function (username, password, done) {
       UserModel.findOne({ email: username }, function (err, user) {
@@ -171,7 +175,7 @@ function getLoginPage(req, res) {
 
 function getRegisterPage(req, res) {
   res.render("register", {
-    title: "Novel Love — Register",
+    title: "Novel Love — Register"
   });
 }
 
@@ -179,11 +183,26 @@ function getRegisterBooksPage(req, res) {
   if (req.session.user) {
     res.render("books", {
       title: "Novel Love — Register Books",
-      newUser: req.session.user,
+      newUser: req.session.user
     });
   } else {
     res.redirect("/register");
   }
+}
+
+function liken(req) {
+  let likedUser = req.body.like;
+  UserModel.updateOne(
+    { _id: req.user._id },
+    { $push: { matches: likedUser } },
+    function (error, success) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(req.user.matches);
+      }
+    }
+  );
 }
 
 let dataProfiles;
@@ -223,7 +242,7 @@ async function homePageFunction(req, res) {
         match: dataProfiles,
         title: "Novel Love — Discover ", // Giving it a specific title for inside the head (used template for this in .hbs file)
         users, // These are the users that are available in the drop down menu
-        user: req.user,
+        user: req.user
       });
     };
     UserModel.find({ gender: req.user.lookingfor }, userData);
@@ -233,7 +252,7 @@ async function homePageFunction(req, res) {
 }
 
 function matchDetailPage(req, res, next) {
-  if(req.user) {
+  if (req.user) {
     let ID = req.params.id;
     let profile = find(dataProfiles, function (value) {
       return value.id === ID;
@@ -246,11 +265,16 @@ function matchDetailPage(req, res, next) {
 
     res.render("detail", {
       matchData: profile,
-      user:req.user,
+      user: req.user
     });
   } else {
     res.redirect("login");
   }
+}
+
+function renderMatches(req, res) {
+  res.render("matches");
+  //  UserModel.find({ likes: req.user.lookingfor }, userData);
 }
 
 // Registration function //
@@ -262,7 +286,7 @@ function registerFunction(req, res) {
     lastname: req.body.lastname,
     age: req.body.age,
     gender: req.body.gender,
-    lookingfor: req.body.lookingfor,
+    lookingfor: req.body.lookingfor
   };
 
   res.redirect("register/books");
@@ -275,7 +299,7 @@ function registerBooksFunction(req, res, next) {
 
   const newUser = new UserModel(req.session.user);
 
-  newUser.save((err) => {
+  newUser.save(err => {
     if (err) {
       next(err);
     } else {
@@ -302,7 +326,7 @@ async function editProfilePageFunction(req, res) {
     // Rendering the edit-profile page
     title: "Novel Love — Edit Profile", // Giving the page its own head title
     // Making sure it contains the req.user properties (name, age, etc.) in the input fields
-    user: req.user,
+    user: req.user
   });
 }
 
@@ -343,6 +367,22 @@ async function editProfileActionFunction(req, res) {
   });
 }
 
+//function to have the user be liked
+// async function likeUser(req, res) {
+//   if (!req.user) {
+//     // If the user is not logged in, the user will be redirected to the homepage.
+//     res.redirect("/");
+//     return;
+//   }
+//   req.user.currentBook = req.body.currentBook; // Currently reading book
+//   await req.user.save(); // Save button
+//   res.render("likes", {
+//     // Rendering the updated edit-profile page
+//     title: "These are your picks",
+//     user: req.user
+//   });
+// }
+
 async function signOutUser(req, res) {
   req.session.destroy();
   res.redirect("/login");
@@ -354,7 +394,7 @@ async function run() {
   await mongoose.connect(MONGO_URL, {
     // Avoiding deprecation warnings
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true
   });
 
   // The Express server will run on port 8000, or on another port given through the terminal (needed for deployment).
