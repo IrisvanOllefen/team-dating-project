@@ -18,7 +18,7 @@ const UserSchema = new Schema({
   age: Number,
   favoriteBooks: [String],
   currentBook: String,
-  matches: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  matches: [{ type: Schema.Types.ObjectId, ref: "User" }]
 });
 
 //Making sure the password gets hashed

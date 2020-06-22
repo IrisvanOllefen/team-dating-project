@@ -1,0 +1,27 @@
+{{#> layout }}
+<main>
+    <section class="discover">
+        <h1> People you liked </h1>
+        <p>Hi {{user.firstname}}</p>
+        <div class="matches">
+            {{#each match}}
+            <a href="/profile/{{this._id}}">
+                <article class="match">
+                    <img src="/uploads/{{this.profilepicture}}" alt="Profile Picture" width="200">
+                    <h3>{{this.firstname}} {{this.lastname}}</h3>
+                    <p><b>Favorite Genres</b></p>
+                    <ul>
+                        <li>{{this.favoriteBooks.[0]}}</li>
+                        <li>{{this.favoriteBooks.[1]}}</li>
+                        <li>{{this.favoriteBooks.[2]}}</li>
+                    </ul>
+                </article>
+            </a>
+
+            
+
+            {{/each}}
+        </div>
+    </section>
+</main>
+{{/layout}}

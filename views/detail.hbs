@@ -15,6 +15,17 @@
                 <li>{{matchData.favoriteBooks.[2]}}</li>
             </ul>
             </div>
+                <div id="likeButton">
+                    
+            <label for="">
+                <form action="/like" method="POST">
+                <input type="hidden" value="{{matchData._id}}" name="like">
+                <button>Like</button> </form>
+
+                
+            </label>
+            </div>
+            </form>
         </div>       
     </section>
 </main>
