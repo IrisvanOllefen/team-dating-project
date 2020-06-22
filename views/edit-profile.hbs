@@ -3,48 +3,80 @@
     <!-- This form has the action that sends you to the result page. It does this by using the post method. -->
     <section>
         <form action="/edit-profile" method="POST" enctype="multipart/form-data">
-            <h1>Welcome back to your profile, {{user.name}}!</h1>
+            <h1>Welcome back to your profile, {{user.firstname}}!</h1>
+            <p>On this page you're able to change all your (personal) information</p>
             <div class="edit-form">
                 <label for="">
                     Profile Picture
                     <input type="file" name="profilepicture" accept="image/png, image/jpeg">
                     <img src="/uploads/{{user.profilepicture}}" alt="Profile Picture" width="200">
                 </label>
-                <label for="">
-                    Name
-                    <input type="text" name="name" value="{{user.name}}" />
+                <label for="firstname">
+                    First Name
+                    <input type="text" id="firstname" name="firstname" value="{{user.firstname}}" />
                 </label>
-                <label for="">
+                <label for="lastname">
+                    Last Name
+                    <input type="text" id="lastname" name="lastname" value="{{user.lastname}}" />
+                </label>
+                <label for="email">
+                    E-mail
+                    <input type="email" id="email" name="email" value="{{user.email}}" />
+                </label>
+                <label for="password">
+                    Password
+                    <input type="password" id="password" name="password" />
+                </label>
+                <label for="age">
                     Age
-                    <input type="number" name="age" value="{{user.age}}" />
+                    <input type="number" id="age" name="age" value="{{user.age}}" />
                 </label>
             </div>
-            <h1>What are your 3 favorite books?</h1>
-            <div class="edit-form">
-                <label for="">
-                    Number 1
-                    <input type="text" name="books[]" value="{{user.favoriteBooks.[0]}}" />
-                </label>
-                <label for="">
-                    Number 2
-                    <input type=" text" name="books[]" value="{{user.favoriteBooks.[1]}}" />
-                </label>
-                <label for="">
-                    Number 3
-                    <input type="text" name="books[]" value="{{user.favoriteBooks.[2]}}" />
-                </label>
+            <h2>What are your 3 favorite books genres?</h2>
+            <div class="genres">
+                <label for="genre1">Genre 1</label>
+                <select name="genre" id="genre1">
+                    <option value="{{user.favoriteBooks.[0]}}">{{user.favoriteBooks.[0]}}</option>
+                    <option value="Self-help">Self-help</option>
+                    <option value="Classic Literature">Classic Literature</option>
+                    <option value="Thriller/Horror">Thriller/Horror</option>
+                    <option value="Romance Novels">Romance Novels</option>
+                    <option value="Non-fiction">Non-fiction</option>
+                </select>
             </div>
-            <h1>What book are you currently reading?</h1>
+            <div class="genres">
+                <label for="genre2">Genre 2</label>
+                <select name="genre" id="genre2">
+                    <option value="{{user.favoriteBooks.[1]}}">{{user.favoriteBooks.[1]}}</option>
+                    <option value="Self-help">Self-help</option>
+                    <option value="Classic Literature">Classic Literature</option>
+                    <option value="Thriller/Horror">Thriller/Horror</option>
+                    <option value="Romance Novels">Romance Novels</option>
+                    <option value="Non-fiction">Non-fiction</option>
+                </select>
+            </div>
+            <div class="genres">
+                <label for="genre3">Genre 3</label>
+                <select name="genre" id="genre3">
+                    <option value="{{user.favoriteBooks.[2]}}">{{user.favoriteBooks.[2]}}</option>
+                    <option value="Self-help">Self-help</option>
+                    <option value="Classic Literature">Classic Literature</option>
+                    <option value="Thriller/Horror">Thriller/Horror</option>
+                    <option value="Romance Novels">Romance Novels</option>
+                    <option value="Non-fiction">Non-fiction</option>
+                </select>
+            </div>
+            <h2>What book are you currently reading?</h2>
             <div class="edit-form">
                 <label for="">
-                    Currently:
+                    Currently Reading:
                     <input type="text" name="currentBook" value="{{user.currentBook}}" />
                 </label>
                 <label for="">
                     <input id="goButton" type="submit" value="Save" />
                 </label>
             </div>
-            <div class="edit-form">
+            <div>
                 <label for="" id="deleteAccount">
                     <input id="deleteCheckbox" type="checkbox" name="deleteAccount" />
                     Check this box if you are ready to delete your account.

@@ -327,14 +327,18 @@ async function editProfileActionFunction(req, res) {
   if (req.file) {
     req.user.profilepicture = req.file.filename; // Profile picture
   }
-  req.user.name = req.body.name; // Name
-  req.user.age = req.body.age; // Age
-  req.user.favoriteBooks = req.body.books; // Array of top 3 books
-  req.user.currentBook = req.body.currentBook; // Currently reading book
-  await req.user.save(); // Save button
+  req.user.firstname = req.body.firstname; 
+  req.user.lastname = req.body.lastname; 
+  req.user.age = req.body.age; 
+  req.user.email = req.body.email; 
+  if(req.body.password) {
+    req.user.password = req.body.password; 
+  }
+  req.user.favoriteBooks = req.body.genre; 
+  req.user.currentBook = req.body.currentBook; 
+  await req.user.save(); 
   res.render("edit-profile", {
-    // Rendering the updated edit-profile page
-    title: "Edit Profile Page",
+    title: "Novel Love — Edit Profile",
     user: req.user,
   });
 }
