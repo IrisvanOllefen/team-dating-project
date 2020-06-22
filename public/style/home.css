@@ -1,0 +1,129 @@
+@import url("https://fonts.googleapis.com/css?family=Red+Hat+Display&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,700;1,500&display=swap");
+/* Global Styling */
+
+*, ::before, ::after {
+    box-sizing: border-box;
+    font-family: var(--main);
+}
+
+:root {
+    --orange: #f79d65;
+    --light-orange: #f7b267;
+    --dark-orange: #f4845f;
+    --light-red: #f27058;
+    --dark-red: #f25c54;
+    --steel-blue: #5b85aa;
+    --purple-navy: #414770;
+    --black: #000000;
+    --white: #ffffff;
+    --main: "Red Hat Display", sans-serif;
+    --secondary: "Zilla Slab", sans-serif;
+}
+
+/* Home Page */
+
+ul {
+    list-style: none;
+    padding-inline-start: 0;
+    margin-block-start: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    height: 100vh;
+}
+
+header {
+    padding: 2em 4em;
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+}
+
+header nav ul {
+    display: flex;
+    align-items: center;
+}
+
+header nav ul li:last-child {
+    margin-left: auto;
+}
+
+header nav ul li img {
+    max-width: 12em;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    font-family: "Red Hat Display";
+    color: var(--orange);
+    background-color: var(--white);
+    padding: 1em 2em;
+    border-radius: 2em;
+    font-size: 1.1em;
+}
+
+header h1 {
+    font-family: "Red Hat Display", sans-serif;
+    margin: 0;
+    color: var(--white);
+    font-size: 2em;
+}
+
+body section {
+    /* https://www.pexels.com/nl-nl/foto/stad-mode-man-paar-3775605/ */
+    background-image: url('../images/bannerimage.jpg');
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    text-align: center;
+    position: relative;
+    z-index: 0;
+}
+
+body section::after {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(244, 132, 95, 0.2);
+    z-index: -1;
+}
+
+body section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body section article h2 {
+    font-family: "Red Hat Display", sans-serif;
+    margin: 0;
+    color: var(--white);
+    font-size: 5em;
+}
+
+body section article p {
+    color: var(--white);
+    font-family: "Zilla Slab";
+}
+
+body section article p:last-child {
+    margin-top: 2em;
+}
+
+body section article a {
+    text-decoration: none;
+    font-family: "Red Hat Display";
+    color: var(--white);
+    background-color: var(--orange);
+    padding: 1em 2em;
+    border-radius: 2em;
+    font-size: 1.1em;
+}
