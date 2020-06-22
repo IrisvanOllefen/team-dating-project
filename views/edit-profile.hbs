@@ -9,7 +9,7 @@
                 <label for="">
                     Profile Picture
                     <input type="file" name="profilepicture" accept="image/png, image/jpeg">
-                    <img src="/uploads/{{user.profilepicture}}" alt="Profile Picture" width="200">
+                    <img src="/uploads/{{user.profilepicture}}" alt="Profile Picture" width="200" id="uploadedimage">
                 </label>
                 <label for="firstname">
                     First Name
@@ -85,6 +85,7 @@
         </form>
     </section>
 </main>
+<script src="../script/pe.js"></script>
 {{/layout}}
 
 {{!-- LEARN MORE --}}
