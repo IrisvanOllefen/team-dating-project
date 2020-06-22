@@ -13,7 +13,6 @@ const UserModel = require("./models/user"); // Self-made user schema/model
 const find = require("array-find"); //array-find for searching the right detailpage'
 const flash = require("connect-flash");
 
-
 // CONFIGURATING ENV FILE TO BLOCK SENSITIVE INFORMATION
 require("dotenv").config();
 
@@ -35,22 +34,21 @@ const upload = multer({
       // If the mimetype is anything else, the callback will return false
       cb(null, false);
     }
-  }
+  },
 });
-
 
 const app = express();
 
 // CREATING SETUP ROUTES, POSTS AND GET REQUESTS
 app
-  .set("view engine", "hbs") 
-  .use(express.static("public")) 
+  .set("view engine", "hbs")
+  .use(express.static("public"))
   .use(bodyParser.urlencoded({ extended: false }))
   .use(
     session({
       secret: "uir3948uri934i9320oi",
       resave: false,
-      saveUninitialized: true
+      saveUninitialized: true,
     })
   )
   .use(passport.initialize())
@@ -100,12 +98,12 @@ hbs.registerPartials(__dirname + "/views/partials", (error) => {
   console.error(error);
 });
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user._id);
 });
 
-passport.deserializeUser(function(id, done) {
-  UserModel.findById(id, function(err, user) {
+passport.deserializeUser(function (id, done) {
+  UserModel.findById(id, function (err, user) {
     done(err, user);
   });
 });
@@ -116,11 +114,11 @@ passport.use(
     {
       clientID: `${process.env.FACEBOOK_APP_ID}`,
       clientSecret: `${process.env.FACEBOOK_APP_SECRET}`,
-      callbackURL: "http://localhost:8000/auth/facebook/callback"
+      callbackURL: "http://localhost:8000/auth/facebook/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       const userByFacebookId = await UserModel.findOne({
-        facebookId: profile.id
+        facebookId: profile.id,
       }).exec();
 
       if (userByFacebookId) {
@@ -143,7 +141,7 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
-      passwordField: "password"
+      passwordField: "password",
     },
     function (username, password, done) {
       UserModel.findOne({ email: username }, function (err, user) {
@@ -172,13 +170,13 @@ function getHomePage(req, res) {
 function getLoginPage(req, res) {
   res.render("login", {
     title: "Novel Love — Login",
-    message: req.flash("error") 
+    message: req.flash("error"),
   });
 }
 
 function getRegisterPage(req, res) {
   res.render("register", {
-    title: "Novel Love — Register"
+    title: "Novel Love — Register",
   });
 }
 
@@ -186,7 +184,7 @@ function getRegisterBooksPage(req, res) {
   if (req.session.user) {
     res.render("books", {
       title: "Novel Love — Register Books",
-      newUser: req.session.user
+      newUser: req.session.user,
     });
   } else {
     res.redirect("/register");
@@ -263,9 +261,9 @@ function matchDetailPage(req, res, next) {
       return;
     }
 
-    res.render("detail", {
+    npmres.render("detail", {
       matchData: profile,
-      user: req.user
+      user: req.user,
     });
   } else {
     res.redirect("login");
@@ -286,7 +284,7 @@ function registerFunction(req, res) {
     lastname: req.body.lastname,
     age: req.body.age,
     gender: req.body.gender,
-    lookingfor: req.body.lookingfor
+    lookingfor: req.body.lookingfor,
   };
 
   res.redirect("register/books");
@@ -299,7 +297,7 @@ function registerBooksFunction(req, res, next) {
 
   const newUser = new UserModel(req.session.user);
 
-  newUser.save(err => {
+  newUser.save((err) => {
     if (err) {
       next(err);
     } else {
@@ -310,9 +308,11 @@ function registerBooksFunction(req, res, next) {
 
 // Login Function
 function loginFunction(req, res, next) {
-  passport.authenticate("local", { failureRedirect: "/login",
-    successRedirect: "/discover", failureFlash: true }
-  )(req, res, next); 
+  passport.authenticate("local", {
+    failureRedirect: "/login",
+    successRedirect: "/discover",
+    failureFlash: true,
+  })(req, res, next);
 }
 
 // EDIT PROFILE ROUTE
@@ -325,7 +325,7 @@ async function editProfilePageFunction(req, res) {
     // Rendering the edit-profile page
     title: "Novel Love — Edit Profile", // Giving the page its own head title
     // Making sure it contains the req.user properties (name, age, etc.) in the input fields
-    user: req.user
+    user: req.user,
   });
 }
 
@@ -338,24 +338,24 @@ async function editProfileActionFunction(req, res) {
 
   // MAKING A DELETE ACCOUNT BUTTON AVAILABLE
   if (req.body.deleteAccount === "on") {
-    await UserModel.deleteOne({ _id: req.user._id }), req.session.destroy(); 
-    res.redirect("/login"); 
+    await UserModel.deleteOne({ _id: req.user._id }), req.session.destroy();
+    res.redirect("/login");
     return;
   }
 
   if (req.file) {
-    req.user.profilepicture = req.file.filename; 
+    req.user.profilepicture = req.file.filename;
   }
-  if(req.body.password) {
-    req.user.password = req.body.password; 
+  if (req.body.password) {
+    req.user.password = req.body.password;
   }
-  req.user.firstname = req.body.firstname; 
-  req.user.lastname = req.body.lastname; 
-  req.user.age = req.body.age; 
-  req.user.email = req.body.email; 
-  req.user.favoriteBooks = req.body.genre; 
-  req.user.currentBook = req.body.currentBook; 
-  await req.user.save(); 
+  req.user.firstname = req.body.firstname;
+  req.user.lastname = req.body.lastname;
+  req.user.age = req.body.age;
+  req.user.email = req.body.email;
+  req.user.favoriteBooks = req.body.genre;
+  req.user.currentBook = req.body.currentBook;
+  await req.user.save();
   res.render("edit-profile", {
     title: "Novel Love — Edit Profile",
     user: req.user,
@@ -389,7 +389,7 @@ async function run() {
   await mongoose.connect(MONGO_URL, {
     // Avoiding deprecation warnings
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   });
 
   // The Express server will run on port 8000, or on another port given through the terminal (needed for deployment).
