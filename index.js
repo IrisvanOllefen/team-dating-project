@@ -205,11 +205,10 @@ function liken(req, res) {
   );
 }
 
-let dataProfiles;
+
 async function getDiscoverPage(req, res) {
   if (req.user) {
     const userData = function (err, userData) {
-      dataProfiles = userData;
       for (let user = 0; user < userData.length; user++) {
         let commonGenres = 0;
         for (let i = 0; i < req.user.favoriteBooks.length; i++) {
@@ -230,14 +229,14 @@ async function getDiscoverPage(req, res) {
             commonGenres +
             " genres gemeen"
         );
-        dataProfiles[user].commonGenres = commonGenres;
-        dataProfiles.sort(function (a, b) {
+        userData[user].commonGenres = commonGenres;
+        userData.sort(function (a, b) {
           return b.commonGenres - a.commonGenres;
         });
-        console.log(dataProfiles);
       }
+
       res.render("discover", {
-        match: dataProfiles,
+        match: userData,
         title: "Novel Love — Discover ",
         user: req.user,
       });
@@ -249,24 +248,26 @@ async function getDiscoverPage(req, res) {
 }
 
 function matchDetailPage(req, res, next) {
-  if (req.user) {
-    let ID = req.params.id;
-    let profile = find(dataProfiles, function (value) {
-      return value.id === ID;
-    });
+
+  const detailPage = function (err, dataProfile) {
+    const profile = dataProfile
 
     if (!profile) {
       next();
       return;
-    }
-
-    res.render("detail", {
+    }else{
+      res.render("detail", {
       matchData: profile,
       user: req.user,
-    });
-  } else {
-    res.redirect("login");
-  }
+      });
+    };
+
+    if (req.user) {
+      const ID = req.params.id;
+      UserModel.findOne({ _id: ID }, detailPage);
+    } else {
+      res.redirect("login");
+    }
 }
 
 async function renderMatches(req, res) {
