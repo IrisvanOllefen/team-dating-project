@@ -19,6 +19,9 @@ require("dotenv").config();
 // THE URL TO MY DATABASE
 const MONGO_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/test?retryWrites=true&w=majority`;
 
+//THE PORT
+const port = process.env.PORT;
+
 // USING MULTER TO UPLOADING IMAGES TO PROFILES
 const upload = multer({
   dest: "public/uploads/", // The destination folder for uploaded images
@@ -400,8 +403,7 @@ async function run() {
     useUnifiedTopology: true,
   });
 
-  // The Express server will run on port 8000, or on another port given through the terminal (needed for deployment).
-  const port = process.env.PORT;
+  // The Express server will run on port 8000, or on another port given through the terminal (needed for deployment)
   app.listen(port || 8000, () => {
     // This immediately gives you the URL to click open through the terminal.
     console.log("Your app is now running on http://localhost:8000");
