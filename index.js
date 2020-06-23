@@ -402,7 +402,7 @@ async function run() {
   });
 
   // The Express server will run on port 8000, or on another port given through the terminal (needed for deployment).
-  app.listen(process.env.PORT || 8000, () => {
+  app.listen(port || 8000, () => {
     // This immediately gives you the URL to click open through the terminal.
     console.log("Your app is now running on http://localhost:8000");
   });
