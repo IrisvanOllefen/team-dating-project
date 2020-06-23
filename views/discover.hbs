@@ -2,7 +2,7 @@
 <main>
     <section class="discover">
         <h1> Discover </h1>
-        <p>Hi {{user.firstname}}</p>
+        <p>Hi {{user.firstname}}, this is the discover page where you're able to see potential matches</p>
         <div class="matches">
             {{#each match}}
             <a href="/profile/{{this._id}}">

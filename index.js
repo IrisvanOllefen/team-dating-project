@@ -65,8 +65,6 @@ app
     upload.single("profilepicture"),
     editProfileActionFunction
   )
-  //.post("/likes", likeUser)
-
   .get("/login", getLoginPage)
   .get("/register", getRegisterPage)
   .get("/register/books", getRegisterBooksPage)
@@ -196,7 +194,7 @@ function liken(req) {
   UserModel.updateOne(
     { _id: req.user._id },
     { $push: { matches: likedUser } },
-    function (error, success) {
+    function (error) {
       if (error) {
         console.log(error);
       } else {
@@ -261,7 +259,7 @@ function matchDetailPage(req, res, next) {
       return;
     }
 
-    npmres.render("detail", {
+    res.render("detail", {
       matchData: profile,
       user: req.user,
     });
@@ -271,8 +269,13 @@ function matchDetailPage(req, res, next) {
 }
 
 function renderMatches(req, res) {
-  res.render("matches");
-  //  UserModel.find({ likes: req.user.lookingfor }, userData);
+  if(req.user) {
+    res.render("matches", {
+      user: req.user
+    });
+  } else {
+    res.redirect("/login");
+  }
 }
 
 // Registration function //
@@ -301,7 +304,7 @@ function registerBooksFunction(req, res, next) {
     if (err) {
       next(err);
     } else {
-      res.redirect("/discover");
+      res.redirect("/login");
     }
   });
 }
@@ -362,21 +365,6 @@ async function editProfileActionFunction(req, res) {
   });
 }
 
-//function to have the user be liked
-// async function likeUser(req, res) {
-//   if (!req.user) {
-//     // If the user is not logged in, the user will be redirected to the homepage.
-//     res.redirect("/");
-//     return;
-//   }
-//   req.user.currentBook = req.body.currentBook; // Currently reading book
-//   await req.user.save(); // Save button
-//   res.render("likes", {
-//     // Rendering the updated edit-profile page
-//     title: "These are your picks",
-//     user: req.user
-//   });
-// }
 
 async function signOutUser(req, res) {
   req.session.destroy();
