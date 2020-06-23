@@ -4,25 +4,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,700;1,500&display=swap");
 /* Global Styling */
 
-*,
-::before,
-::after {
+*, ::before, ::after {
   box-sizing: border-box;
   font-family: var(--main);
 }
 
 :root {
-    --orange: #f79d65;
-    --light-orange: #f7b267;
-    --dark-orange: #f4845f;
-    --light-red: #f27058;
-    --dark-red: #f25c54;
-    --steel-blue: #5b85aa;
-    --purple-navy: #414770;
-    --black: #000000;
-    --white: #ffffff;
-    --main: "Red Hat Display", sans-serif;
-    --secondary: "Zilla Slab", sans-serif;
+  --orange: #f79d65;
+  --light-orange: #f7b267;
+  --dark-orange: #f4845f;
+  --light-red: #f27058;
+  --dark-red: #f25c54;
+  --steel-blue: #5b85aa;
+  --purple-navy: #414770;
+  --black: #000000;
+  --white: #ffffff;
+  --main: "Red Hat Display", sans-serif;
+  --secondary: "Zilla Slab", sans-serif;
 }
 
 a {
@@ -78,19 +76,18 @@ header h1 {
   font-size: 2.5em;
 }
 
-header nav > div {
+header nav>div {
   margin-top: 1.5em;
 }
 
-header nav > div ul {
+header nav>div ul {
   width: 315px;
   justify-content: space-between;
   display: flex;
   flex-wrap: wrap;
 }
 
-header nav > div ul li,
-header nav > div ul button {
+header nav>div ul li, header nav>div ul button {
   background-color: #fff;
   padding: 1em;
   border-radius: 100%;
@@ -106,19 +103,17 @@ header nav div img {
 }
 
 header nav ul li img {
-    max-width: 12em;
+  max-width: 12em;
 }
 
 /* Login Page */
 
-#login section,
-#register section {
+#login section, #register section {
   display: flex;
   justify-content: space-between;
 }
 
-#login section > div,
-#register section > div {
+#login section>div, #register section>div {
   flex: 0 50%;
 }
 
@@ -132,69 +127,64 @@ header nav ul li img {
 }
 
 #login section form label, #register section form label, #books section form label {
-    font-family: var(--secondary);
-    margin-bottom: 0.5em;
+  font-family: var(--secondary);
+  margin-bottom: 0.5em;
 }
 
 #login section form input, #register section form input, #books section form input {
-    margin-bottom: 1.2em;
-    height: 35px;
-    border: 1px solid #b8b8b8;
-    border-radius: 0.2em;
-    padding-left: 0.5em;
+  margin-bottom: 1.2em;
+  height: 35px;
+  border: 1px solid #b8b8b8;
+  border-radius: 0.2em;
+  padding-left: 0.5em;
 }
 
 #login section form button {
-    text-decoration: none;
-    border: none;
-    font-size: 1em;
-    outline: none;
-    background-color: white;
-    cursor: pointer;
-    border: 1px solid var(--orange);
-    padding: 0.6em;
+  text-decoration: none;
+  border: none;
+  font-size: 1em;
+  outline: none;
+  background-color: white;
+  cursor: pointer;
+  border: 1px solid var(--orange);
+  padding: 0.6em;
 }
 
-#login section div:first-of-type p,
-#register section div:first-of-type p,
-#books section div p {
+#login section div:first-of-type p, #register section div:first-of-type p, #books section div p {
   font-family: var(--secondary);
 }
 
-#login section div:first-of-type a,
-#register section div:first-of-type a {
+#login section div:first-of-type a, #register section div:first-of-type a {
   color: var(--orange);
 }
 
-#login section div:last-of-type > p {
+#login section div:last-of-type>p {
   text-align: center;
 }
 
 #login section div:last-of-type>p:last-of-type {
-    margin-top: 2em;
+  margin-top: 2em;
 }
 
 #login section div:last-of-type a, #register section form button, #books section form button {
-    text-decoration: none;
-    color: var(--white);
-    background-color: var(--orange);
-    border: 1px solid var(--orange);
-    padding: 0.7em 2em;
+  text-decoration: none;
+  color: var(--white);
+  background-color: var(--orange);
+  border: 1px solid var(--orange);
+  padding: 0.7em 2em;
 }
 
 #login #loginerror {
-    color: red;
+  color: red;
 }
 
 /* Register Page */
 
-#register section > div:last-of-type {
+#register section>div:last-of-type {
   margin-left: 6em;
 }
 
-#register section form,
-#books section form,
-#books section div {
+#register section form, #books section form, #books section div {
   display: flex;
   flex-direction: column;
   padding-bottom: 1em;
@@ -207,15 +197,14 @@ header nav ul li img {
 }
 
 #register form li {
-    margin: 0.6em 0.7em 0.3em 0;
-    width: 80px;
-    height: 50px;
-    position: relative;
-    text-align: center;
+  margin: 0.6em 0.7em 0.3em 0;
+  width: 80px;
+  height: 50px;
+  position: relative;
+  text-align: center;
 }
 
-#register form ul li label,
-#register form ul li input {
+#register form ul li label, #register form ul li input {
   display: block;
   position: absolute;
   top: 0;
@@ -230,9 +219,9 @@ header nav ul li img {
 }
 
 #register input[type="radio"]:checked+label, .checked+label {
-    background-color: var(--orange);
-    color: var(--white);
-    transition: 0.3s;
+  background-color: var(--orange);
+  color: var(--white);
+  transition: 0.3s;
 }
 
 #register form .radios label:not(:first-child) {
@@ -253,18 +242,18 @@ header nav ul li img {
   justify-content: space-between;
 }
 
-#books section form > div:last-of-type {
+#books section form>div:last-of-type {
   margin-right: 2em;
 }
 
 #books section form select {
-    padding: 0.5em 0.8em;
-    margin: 0.5em 0;
-    border: 1px solid #b8b8b8;
-    border-radius: 0.2em;
+  padding: 0.5em 0.8em;
+  margin: 0.5em 0;
+  border: 1px solid #b8b8b8;
+  border-radius: 0.2em;
 }
 
-#books section form > div:last-of-type label {
+#books section form>div:last-of-type label {
   cursor: pointer;
   padding: 1em 1.5em;
   color: var(--orange);
@@ -272,12 +261,11 @@ header nav ul li img {
   text-align: center;
 }
 
-#books section form > div:last-of-type input {
+#books section form>div:last-of-type input {
   display: none;
 }
 
-#books section form > div:last-of-type p,
-#picture-profile {
+#books section form>div:last-of-type p, #picture-profile {
   max-width: 50%;
   margin: 0 auto;
   text-align: center;
@@ -295,13 +283,13 @@ section.discover h1 {
 }
 
 .matches article {
-    padding: 20px;
-    margin: 15px;
-    background-color: var(--orange);
-    border-radius: 15px;
-    -webkit-box-shadow: 5px 5px 5px 0px rgba(224, 224, 224, 1);
-    -moz-box-shadow: 5px 5px 5px 0px rgba(224, 224, 224, 1);
-    box-shadow: 5px 5px 5px 0px rgba(224, 224, 224, 1);
+  padding: 20px;
+  margin: 15px;
+  background-color: var(--orange);
+  border-radius: 15px;
+  -webkit-box-shadow: 5px 5px 5px 0px rgba(224, 224, 224, 1);
+  -moz-box-shadow: 5px 5px 5px 0px rgba(224, 224, 224, 1);
+  box-shadow: 5px 5px 5px 0px rgba(224, 224, 224, 1);
 }
 
 .matches article ul {
@@ -326,9 +314,8 @@ section.discover h1 {
 }
 
 .detail-page p:last-of-type {
-    margin-top: 50px;
-    color: var(--orange);
-    font-size: 18px;
+  color: var(--orange);
+  font-size: 18px;
 }
 
 .detail-page ul {
@@ -336,101 +323,109 @@ section.discover h1 {
   margin-left: 15px;
 }
 
-#likeButton {
-  width: 100px;
-  height: 100px;
+#likeButton button {
+  background-color: var(--dark-red);
+  color: #fff;
+  border: none;
+  padding: 1em 2em;
+  cursor: pointer;
+}
+
+#removelike {
+  background-color: var(--white);
+  border: none;
+  padding: 1em 3em;
   text-align: center;
-  display: flex;
-  justify-content: flex-end;
+  cursor: pointer;
 }
 
 /* Edit Profile Page */
 
 .edit-form {
-    display: flex;
-    flex-direction: column;
-    padding: 0.5em;
-    padding-left: 0;
-    justify-content: left;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5em;
+  padding-left: 0;
+  justify-content: left;
 }
 
 .edit-form label {
-    padding: 0.5em;
-    padding-left: 0;
+  padding: 0.5em;
+  padding-left: 0;
 }
 
 .editprofile .genres {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .editprofile form select {
-    width: 50%;
-    padding: 0.5em 0.8em;
-    margin: 0.5em 0;
-    border: 1px solid #b8b8b8;
-    border-radius: 0.2em;
+  width: 50%;
+  padding: 0.5em 0.8em;
+  margin: 0.5em 0;
+  border: 1px solid #b8b8b8;
+  border-radius: 0.2em;
 }
 
 .edit-form input {
-    display: flex;
-    flex-direction: column;
-    padding: 0.5rem;
-    margin: 0.3rem;
-    width: 20rem;
-    border-color: var(--orange);
-    border-width: 0.2rem;
-    border-style: solid;
-    background-color: white;
-    padding-left: 0.5rem;
-    margin-left: 0;
-    margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  margin: 0.3rem;
+  width: 20rem;
+  border-color: var(--orange);
+  border-width: 0.2rem;
+  border-style: solid;
+  background-color: white;
+  padding-left: 0.5rem;
+  margin-left: 0;
+  margin-bottom: 1rem;
 }
 
 #goButton {
-    background-color: var(--orange);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    padding: 0.5rem;
-    margin: 0.3rem;
-    width: 20rem;
-    border-width: 0.2rem;
-    border-style: solid;
-    padding-left: 0.5rem;
-    margin-left: 0;
-    margin-bottom: 1rem;
+  background-color: var(--orange);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  margin: 0.3rem;
+  width: 20rem;
+  border-width: 0.2rem;
+  border-style: solid;
+  padding-left: 0.5rem;
+  margin-left: 0;
+  margin-bottom: 1rem;
 }
 
 #deleteAccount {
-    display: flex;
-    flex-direction: row;
-    padding: 0;
-    margin: 0;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin: 0;
 }
 
 /* Media Queries */
 
 @media screen and (max-width: 1200px) {
-    #login section, #register section {
-        flex-direction: column;
-        justify-content: flex-start;
-    }
-    #register section>div:last-of-type {
-        margin-left: 0;
-    }
+  #login section, #register section {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  #register section>div:last-of-type {
+    margin-left: 0;
+  }
 }
 
 @media screen and (max-width: 992px) {
-    section {
-        max-width: 70%;
-    }
+  section {
+    max-width: 70%;
+  }
 }
 
 @media screen and (max-width: 768px) {
-    #register section form {
-        max-width: 100%;
-    }
+  #register section form {
+    max-width: 100%;
+  }
 }
 
 @media screen and (max-width: 576px) {}
