@@ -5,28 +5,26 @@
             <h1>{{matchData.firstname}} {{matchData.lastname}}</h1>
             <img src="/uploads/{{matchData.profilepicture}}" alt="">
             <div class="info">
-            <p>Age: {{matchData.age}} </p>
-            <p>Gender: {{matchData.gender}} </p>
-            <p>Looking for: {{matchData.lookingfor}} </p>
-            <p><b>Favorite Genres</b></p>
-            <ul>
-                <li>{{matchData.favoriteBooks.[0]}}</li>
-                <li>{{matchData.favoriteBooks.[1]}}</li>
-                <li>{{matchData.favoriteBooks.[2]}}</li>
-            </ul>
+                <p>Age: {{matchData.age}} </p>
+                <p>Gender: {{matchData.gender}} </p>
+                <p>Looking for: {{matchData.lookingfor}} </p>
+                <p><b>Favorite Genres</b></p>
+                <ul>
+                    <li>{{matchData.favoriteBooks.[0]}}</li>
+                    <li>{{matchData.favoriteBooks.[1]}}</li>
+                    <li>{{matchData.favoriteBooks.[2]}}</li>
+                </ul>
             </div>
-                <div id="likeButton">
-                    
-            <label for="">
-                <form action="/like" method="POST">
-                <input type="hidden" value="{{matchData._id}}" name="like">
-                <button>Like</button> </form>
+            <div id="likeButton">
 
-                
-            </label>
+                <label for="">
+                    <form action="/like" method="POST">
+                        <input type="hidden" value="{{matchData._id}}" name="like">
+                        <button>Like</button> </form>
+                </label>
             </div>
             </form>
-        </div>       
+        </div>
     </section>
 </main>
 {{/layout}}

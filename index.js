@@ -65,6 +65,7 @@ app
     upload.single("profilepicture"),
     editProfileActionFunction
   )
+  .post("/removelike", removeLike)
   .get("/login", getLoginPage)
   .get("/register", getRegisterPage)
   .get("/register/books", getRegisterBooksPage)
@@ -189,7 +190,7 @@ function getRegisterBooksPage(req, res) {
   }
 }
 
-function liken(req) {
+function liken(req, res) {
   let likedUser = req.body.like;
   UserModel.updateOne(
     { _id: req.user._id },
@@ -198,7 +199,7 @@ function liken(req) {
       if (error) {
         console.log(error);
       } else {
-        console.log(req.user.matches);
+        res.redirect("/discover");
       }
     }
   );
@@ -268,14 +269,33 @@ function matchDetailPage(req, res, next) {
   }
 }
 
-function renderMatches(req, res) {
+async function renderMatches(req, res) {
   if(req.user) {
+    const match = await UserModel.findOne({ _id: req.user._id})
+      .populate("matches") 
+      .exec();
     res.render("matches", {
-      user: req.user
+      user: req.user,
+      match: match.matches
     });
   } else {
     res.redirect("/login");
   }
+}
+
+function removeLike(req, res) {
+  let removedUser = req.body.remove;
+  UserModel.updateOne(
+    { _id: req.user._id },
+    { $pull: { matches: removedUser } },
+    function (error) {
+      if (error) {
+        console.log(error);
+      } else {
+        res.redirect("/matches");
+      }
+    }
+  );
 }
 
 // Registration function //
