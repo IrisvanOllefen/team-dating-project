@@ -248,26 +248,25 @@ async function getDiscoverPage(req, res) {
 }
 
 function matchDetailPage(req, res, next) {
-
   const detailPage = function (err, dataProfile) {
     const profile = dataProfile
 
     if (!profile) {
       next();
       return;
-    }else{
-      res.render("detail", {
+    }
+    res.render("detail", {
       matchData: profile,
       user: req.user,
-      });
-    };
+    });
+  };
 
-    if (req.user) {
-      const ID = req.params.id;
-      UserModel.findOne({ _id: ID }, detailPage);
-    } else {
-      res.redirect("login");
-    }
+  if (req.user) {
+    const ID = req.params.id;
+    UserModel.findOne({ _id: ID }, detailPage);
+  } else {
+    res.redirect("login");
+  }
 }
 
 async function renderMatches(req, res) {
