@@ -212,7 +212,8 @@ function liken(req, res) {
 async function getDiscoverPage(req, res) {
   if (req.user) {
     const userData = function (err, userData) {
-      for (let user = 0; user < userData.length; user++) {
+      let dataProfiles = userData;
+      for ( let user = 0; user < userData.length; user++) {
         let commonGenres = 0;
         for (let i = 0; i < req.user.favoriteBooks.length; i++) {
           if (req.user.favoriteBooks[i] === userData[user].favoriteBooks[0]) {
@@ -232,7 +233,7 @@ async function getDiscoverPage(req, res) {
             commonGenres +
             " genres gemeen"
         );
-        userData[user].commonGenres = commonGenres;
+        dataProfiles[user].commongenres = commonGenres;
         userData.sort(function (a, b) {
           return b.commonGenres - a.commonGenres;
         });
